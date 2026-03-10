@@ -9,26 +9,22 @@ interface Props {
 
 export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
     return (
-        <section className="bg-white rounded-[28px] p-8 border border-[#F2F4F6] space-y-7 shadow-sm">
-            <Text className="text-[17px] font-bold text-[#191F28] px-1">매장 상세 정보</Text>
-            <div className="space-y-8 pt-2">
-                <div className="flex items-start gap-4">
-                    <div className="p-3 bg-[#F9FAFB] rounded-2xl text-[#8B95A1] shrink-0 border border-[#F2F4F6]">
-                        <Info className="w-5 h-5" />
+        <section className="space-y-4">
+            <Text className="text-[14px] font-bold text-[#8B95A1] px-1 uppercase tracking-wider">매장 상세 정보</Text>
+            <div className="bg-white rounded-[24px] overflow-hidden border border-[#F2F4F6]">
+                <div className="px-6 py-5 flex items-center justify-between border-b border-[#F2F4F6]">
+                    <div className="flex items-center gap-2.5">
+                        <Info className="w-4 h-4 text-[#B0B8C1]" />
+                        <Text className="text-[15px] font-medium text-[#4E5968]">업종</Text>
                     </div>
-                    <div className="space-y-1.5 flex-1 overflow-hidden">
-                        <Text className="text-[13px] font-bold text-[#8B95A1] block">업종</Text>
-                        <Text className="text-[17px] font-bold text-[#191F28] break-all">{restaurant.category}</Text>
-                    </div>
+                    <Text className="text-[16px] font-bold text-[#191F28]">{restaurant.category}</Text>
                 </div>
-                <div className="flex items-start gap-4">
-                    <div className="p-3 bg-[#F9FAFB] rounded-2xl text-[#8B95A1] shrink-0 border border-[#F2F4F6]">
-                        <MapPin className="w-5 h-5" />
+                <div className="px-6 py-5 space-y-2.5">
+                    <div className="flex items-center gap-2.5">
+                        <MapPin className="w-4 h-4 text-[#B0B8C1]" />
+                        <Text className="text-[15px] font-medium text-[#4E5968]">소재지</Text>
                     </div>
-                    <div className="space-y-1.5 flex-1">
-                        <Text className="text-[13px] font-bold text-[#8B95A1] block">소재지</Text>
-                        <Text className="text-[16px] font-bold text-[#4E5968] leading-[1.6] break-keep">{restaurant.address}</Text>
-                    </div>
+                    <Text className="text-[16px] font-bold text-[#191F28] leading-[1.6] break-keep">{restaurant.address}</Text>
                 </div>
             </div>
         </section>
