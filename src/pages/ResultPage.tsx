@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@toss/tds-mobile';
 import { useSearchStore } from '../store/useSearchStore';
-import { ChevronLeft, ShieldCheck, AlertTriangle, Calendar, Info, MapPin } from 'lucide-react';
+import { ChevronLeft, ShieldCheck, Calendar, Info, MapPin } from 'lucide-react';
 
 export const ResultPage: React.FC = () => {
     const { selectedRestaurant } = useSearchStore();
@@ -10,124 +10,126 @@ export const ResultPage: React.FC = () => {
 
     if (!selectedRestaurant) return null;
 
-    const isViolation = selectedRestaurant.status === '적발';
+
+    const formatDate = (dateStr?: string) => {
+        if (!dateStr || dateStr.length !== 8) return dateStr || '정보 없음';
+        return `${dateStr.substring(0, 4)}년 ${parseInt(dateStr.substring(4, 6))}월 ${parseInt(dateStr.substring(6, 8))}일`;
+    };
 
     return (
         <div className="app-container !bg-[#F9FAFB]">
-            <div className="flex-1 flex flex-col bg-white">
-                <header className="px-6 py-6 flex items-center bg-white sticky top-0 z-10 border-b border-[#F2F4F6]/60">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-[#8B95A1] active:bg-gray-100 rounded-full transition-colors">
+            <div className="flex-1 flex flex-col">
+                <header className="px-6 py-4 flex items-center bg-white/80 backdrop-blur-md sticky top-0 z-20 border-b border-[#F2F4F6]">
+                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-[#8B95A1] active:scale-95 transition-transform">
                         <ChevronLeft className="w-6 h-6" />
                     </button>
-                    <Text className="flex-1 text-center font-bold text-[#191F28] mr-8">위생 정보 상세</Text>
+                    <Text className="flex-1 text-center font-bold text-[16px] text-[#191F28] mr-8">위생 적발 상세 내역</Text>
                 </header>
 
-                <main className="flex-1 px-8 pt-12 pb-24 space-y-12 animate-fade-in-up">
-                    <div className="flex flex-col items-center text-center space-y-8">
-                        {isViolation ? (
-                            <>
-                                <div className="relative">
-                                    <div className="w-24 h-24 bg-[#FFF0F0] rounded-[32px] flex items-center justify-center animate-bounce">
-                                        <AlertTriangle className="w-12 h-12 text-[#F04452]" />
-                                    </div>
-                                    <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-2 shadow-sm border border-red-50">
-                                        🚨
-                                    </div>
-                                </div>
-                                <div className="space-y-3">
-                                    <Text className="text-[26px] font-bold text-[#191F28] tracking-tight leading-tight">이 식당은 최근<br /><span className="text-[#F04452]">적발 이력이 있어요</span></Text>
-                                    <Text className="text-[16px] text-[#4E5968] leading-relaxed font-medium">식약처 점검 결과 부적격 판정을 받은<br />기록이 확인되었습니다.</Text>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="relative">
-                                    <div className="w-24 h-24 bg-[#E8F8F0] rounded-[32px] flex items-center justify-center">
-                                        <ShieldCheck className="w-12 h-12 text-[#00D082]" />
-                                    </div>
-                                    <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-2 shadow-sm border border-green-50">
-                                        ✨
-                                    </div>
-                                </div>
-                                <div className="space-y-3">
-                                    <Text className="text-[26px] font-bold text-[#191F28] tracking-tight leading-tight">걱정 마세요!<br /><span className="text-[#00D082]">안전한 식당이에요</span></Text>
-                                    <Text className="text-[16px] text-[#4E5968] leading-relaxed font-medium">최근 위생 점검 데이터에서<br />위반 내역이 발견되지 않았습니다.</Text>
-                                </div>
-                            </>
-                        )}
+                <main className="flex-1 px-6 pt-8 pb-32 space-y-10 animate-fade-in-up">
+                    {/* 상단 요약 섹션 */}
+                    <div className="flex flex-col items-center text-center space-y-5 px-4">
+                        <div className="w-20 h-20 bg-[#FFF0F0] rounded-full flex items-center justify-center text-4xl shadow-sm">🚨</div>
+                        <div className="space-y-2">
+                            <Text className="text-[24px] font-bold text-[#191F28] tracking-tight leading-tight">
+                                {selectedRestaurant.name}<br />
+                                <span className="text-[#F04452]">위반 기록이 발견되었습니다</span>
+                            </Text>
+                            <Text className="text-[15px] text-[#8B95A1] leading-relaxed font-medium">
+                                식약처 공공데이터를 기반으로 확인된<br />행정처분 기록입니다.
+                            </Text>
+                        </div>
                     </div>
 
-                    {/* 식당 기본 정보 카드 */}
-                    <section className="bg-[#F9FAFB] rounded-[28px] p-7 border border-[#F2F4F6] space-y-6 shadow-sm">
-                        <div className="space-y-2 pb-4 border-b border-[#E5E8EB]">
-                            <Text className="text-xl font-bold text-[#191F28]">{selectedRestaurant.name}</Text>
-                            <div className="flex items-start gap-1.5 text-[#8B95A1]">
-                                <MapPin className="w-3.5 h-3.5 mt-1 shrink-0" />
-                                <Text className="text-[14px] leading-snug">{selectedRestaurant.address}</Text>
-                            </div>
+                    {/* 상세 위반 내역 (최상단 배치) */}
+                    <section className="space-y-4">
+                        <div className="flex items-center justify-between px-1">
+                            <Text className="text-[18px] font-bold text-[#333D4B]">상세 적발 기록</Text>
+                            <Text className="text-[13px] font-bold text-[#F04452] bg-[#FFF0F0] px-2.5 py-1 rounded-full">
+                                총 {selectedRestaurant.raw?.length || 0}건
+                            </Text>
                         </div>
-
-                        <div className="space-y-5 pt-2">
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-2 text-[#4E5968]">
-                                    <Calendar className="w-4 h-4 text-[#B0B8C1]" />
-                                    <Text className="text-[15px] font-medium">최근 점검일</Text>
-                                </div>
-                                <Text className="text-[15px] font-bold text-[#191F28]">{selectedRestaurant.lastInspection || '기록 없음'}</Text>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-2 text-[#4E5968]">
-                                    <Info className="w-4 h-4 text-[#B0B8C1]" />
-                                    <Text className="text-[15px] font-medium">업태명</Text>
-                                </div>
-                                <Text className="text-[15px] font-bold text-[#191F28]">{selectedRestaurant.category}</Text>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* 상세 위반 내역 섹션 */}
-                    <section className="space-y-5">
-                        <Text className="text-[18px] font-bold text-[#333D4B] ml-1">상세 기록</Text>
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             {selectedRestaurant.raw && selectedRestaurant.raw.length > 0 ? (
                                 selectedRestaurant.raw.map((row, idx) => (
-                                    <div key={idx} className="bg-white border border-[#F2F4F6] rounded-[28px] p-6 space-y-5 shadow-sm">
-                                        <div className="flex items-center justify-between">
-                                            <div className="px-3 py-1 bg-[#FFF0F0] text-[#F04452] rounded-lg text-[12px] font-bold">
+                                    <div key={idx} className="bg-white border border-[#F2F4F6] rounded-[28px] p-7 space-y-6 shadow-sm">
+                                        <div className="flex items-center justify-between pb-4 border-b border-[#F2F4F6]">
+                                            <div className="px-3 py-1.5 bg-[#FFF0F0] text-[#F04452] rounded-xl text-[12px] font-extrabold uppercase tracking-wider">
                                                 {row.DSPS_TYPECD_NM}
                                             </div>
-                                            <Text className="text-[13px] text-[#B0B8C1] font-bold">{row.DSPS_DCSNDT}</Text>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <div className="text-[14px] font-bold text-[#8B95A1]">위반 내용</div>
-                                            <div className="bg-[#F9FAFB] p-4 rounded-2xl">
-                                                <Text className="text-[15px] text-[#4E5968] leading-relaxed font-medium">{row.VILTCN}</Text>
+                                            <div className="flex items-center gap-1.5 text-[#B0B8C1]">
+                                                <Calendar className="w-3.5 h-3.5" />
+                                                <Text className="text-[13px] font-bold">{formatDate(row.DSPS_DCSNDT)}</Text>
                                             </div>
                                         </div>
-                                        <div className="space-y-2 pt-1 border-t border-[#F2F4F6] mt-2">
-                                            <div className="text-[14px] font-bold text-[#8B95A1] pt-3">처분 결과</div>
-                                            <Text className="text-[15px] text-[#191F28] font-bold leading-relaxed">{row.DSPSCN}</Text>
+                                        
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+                                                <Text className="text-[14px] font-bold text-[#8B95A1]">위반 내용</Text>
+                                            </div>
+                                            <div className="bg-[#F9FAFB] p-5 rounded-[20px] border border-[#F2F4F6]/50">
+                                                <Text className="text-[15px] text-[#4E5968] leading-relaxed font-semibold">{row.VILTCN}</Text>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3 pt-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 bg-[#3182F6] rounded-full" />
+                                                <Text className="text-[14px] font-bold text-[#8B95A1]">처분 결과</Text>
+                                            </div>
+                                            <div className="px-5">
+                                                <Text className="text-[16px] text-[#191F28] font-bold leading-relaxed">{row.DSPSCN}</Text>
+                                            </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="py-16 bg-white border border-[#F2F4F6] rounded-[28px] flex flex-col items-center justify-center space-y-4">
-                                    <div className="p-4 bg-[#E8F8F0] rounded-full text-[#00D082]">
-                                        <ShieldCheck className="w-8 h-8" />
-                                    </div>
-                                    <Text className="text-[#8B95A1] font-bold text-[16px]">깨끗한 식당입니다</Text>
+                                <div className="py-20 bg-white border border-[#F2F4F6] rounded-[32px] flex flex-col items-center justify-center space-y-4">
+                                    <ShieldCheck className="w-12 h-12 text-[#00D082] opacity-20" />
+                                    <Text className="text-[#B0B8C1] font-bold text-[16px]">기록이 없습니다</Text>
                                 </div>
                             )}
                         </div>
                     </section>
+
+                    {/* 식당 기본 정보 (하단 배치) */}
+                    <section className="bg-white rounded-[28px] p-8 border border-[#F2F4F6] space-y-7 shadow-sm mb-12">
+                        <Text className="text-[17px] font-bold text-[#191F28] px-1">식당 상세 정보</Text>
+                        <div className="space-y-8 pt-2">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-[#F9FAFB] rounded-2xl text-[#8B95A1] shrink-0 border border-[#F2F4F6]">
+                                    <Info className="w-5 h-5" />
+                                </div>
+                                <div className="space-y-1.5 flex-1 overflow-hidden">
+                                    <Text className="text-[13px] font-bold text-[#8B95A1] block">상호명 및 업종</Text>
+                                    <div className="flex flex-wrap items-baseline gap-2">
+                                        <Text className="text-[18px] font-bold text-[#191F28] break-all">{selectedRestaurant.name}</Text>
+                                        <span className="text-[13px] font-bold text-[#3182F6] bg-blue-50 px-2 py-0.5 rounded-md shrink-0">
+                                            {selectedRestaurant.category}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-[#F9FAFB] rounded-2xl text-[#8B95A1] shrink-0 border border-[#F2F4F6]">
+                                    <MapPin className="w-5 h-5" />
+                                </div>
+                                <div className="space-y-1.5 flex-1">
+                                    <Text className="text-[13px] font-bold text-[#8B95A1] block">소재지</Text>
+                                    <Text className="text-[16px] font-bold text-[#4E5968] leading-[1.6] break-keep">{selectedRestaurant.address}</Text>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </main>
 
-                <footer className="p-6 bg-white border-t border-[#F2F4F6] sticky bottom-0">
+                <footer className="p-6 bg-white/80 backdrop-blur-md border-t border-[#F2F4F6] fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-20">
                     <button
-                        className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.98] transition-all shadow-lg shadow-blue-100"
+                        className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.98] transition-all shadow-xl shadow-blue-100"
                         onClick={() => navigate('/')}
                     >
-                        홈으로 돌아가기
+                        닫기
                     </button>
                 </footer>
             </div>

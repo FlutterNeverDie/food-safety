@@ -141,9 +141,7 @@ export const SearchPage: React.FC = () => {
 
     const handleRestaurantClick = (restaurant: Restaurant) => {
         setSelectedRestaurant(restaurant);
-        addRecentSearch(restaurant.name);
-
-        const isDanger = restaurant.status === '적발';
+        
         overlay.open(({ isOpen, close, exit }) => {
             const handleClose = () => {
                 close();
@@ -156,31 +154,61 @@ export const SearchPage: React.FC = () => {
                     onClick={handleClose}
                 >
                     <div
-                        className={`w-full max-w-md bg-white rounded-[32px] p-8 pb-10 text-center space-y-8 transform transition-all duration-300 shadow-2xl ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+                        className={`w-full max-w-md bg-white rounded-[32px] p-8 pb-10 space-y-7 transform transition-all duration-300 shadow-2xl ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex justify-center">
-                            <div className={`w-20 h-20 ${isDanger ? 'bg-[#FFF0F0]' : 'bg-[#E8F3FF]'} rounded-full flex items-center justify-center`}>
-                                {isDanger ? <AlertCircle className="w-10 h-10 text-[#F04452]" /> : <Search className="w-8 h-8 text-[#3182F6]" />}
+                        <div className="flex flex-col items-center text-center space-y-4">
+                            <div className="w-16 h-16 bg-[#FFF0F0] rounded-full flex items-center justify-center text-3xl">🚨</div>
+                            <div className="space-y-2">
+                                <Text className="text-[22px] font-bold leading-tight text-[#191F28]">
+                                    {restaurant.name}의<br />위생 적발 이력이 있어요
+                                </Text>
+                                <Text className="text-[15px] leading-relaxed text-[#8B95A1] font-medium">
+                                    식약처 데이터를 기반으로 확인된<br />행정처분 내역입니다.
+                                </Text>
                             </div>
                         </div>
-                        <div className="space-y-3">
-                            <Text className="text-2xl font-bold leading-tight text-[#191F28]">
-                                {isDanger ? '잠깐! 위생 적발 이력이\n발견된 식당이에요.' : '위생 이력을 확인 할까요?'}
-                            </Text>
-                            <Text className="text-[16px] leading-relaxed text-[#4E5968] font-medium">
-                                {isDanger ? '안전한 식사를 위해 상세 내용을\n먼저 확인해보시는 건 어떨까요?' : '식약처 공공데이터를 기반으로\n위생 안전성을 체크합니다.'}
-                            </Text>
+
+                        <div className="bg-[#F9FAFB] rounded-[24px] p-6 space-y-4 border border-[#F2F4F6]">
+                            <div className="flex justify-between items-start">
+                                <Text className="text-[14px] font-bold text-[#4E5968]">최근 적발일</Text>
+                                <Text className="text-[14px] font-medium text-[#191F28]">
+                                    {(() => {
+                                        const date = restaurant.lastInspection;
+                                        if (date && date.length === 8) {
+                                            return `${date.substring(0, 4)}년 ${parseInt(date.substring(4, 6))}월 ${parseInt(date.substring(6, 8))}일`;
+                                        }
+                                        return date || '정보 없음';
+                                    })()}
+                                </Text>
+                            </div>
+                            <div className="space-y-2">
+                                <Text className="text-[14px] font-bold text-[#4E5968] block">주요 위반 내용</Text>
+                                <div className="space-y-1.5">
+                                    {restaurant.violations?.slice(0, 2).map((v, i) => (
+                                        <div key={i} className="flex gap-2">
+                                            <span className="text-[#F04452] shrink-0">•</span>
+                                            <Text className="text-[13px] font-medium text-[#4E5968] leading-relaxed line-clamp-2">
+                                                {v.split(': ')[0]}
+                                            </Text>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
+
                         <div className="space-y-3 pt-2">
                             <button
                                 className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.97] transition-all"
                                 onClick={() => { handleClose(); navigate('/result'); }}
                             >
-                                {isDanger ? '상세 내용 확인하기' : '확인하기'}
+                                상세 내역 전체보기
                             </button>
-                            <button className="w-full py-4 text-[#8B95A1] font-bold" onClick={handleClose}>
-                                {isDanger ? '닫기' : '취소'}
+                            <button 
+                                className="w-full py-2 text-[#8B95A1] font-bold text-[15px]" 
+                                onClick={handleClose}
+                            >
+                                닫기
                             </button>
                         </div>
                     </div>
