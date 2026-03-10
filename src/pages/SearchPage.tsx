@@ -94,7 +94,7 @@ export const SearchPage: React.FC = () => {
                         {/* 선택 그리드 (스크롤 영영 및 높이 고정) */}
                         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
                             {step === 'city' ? (
-                                <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 custom-scrollbar pb-2">
+                                <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 custom-scrollbar content-start pb-2">
                                     {Object.entries(PROVINCE_DISPLAY_NAMES).map(([key, name]) => (
                                         <button
                                             key={key}
@@ -113,7 +113,7 @@ export const SearchPage: React.FC = () => {
                                     >
                                         <ChevronRight className="w-4 h-4 rotate-180" /> 처음부터 다시 선택
                                     </button>
-                                    <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 custom-scrollbar flex-1 pb-2">
+                                    <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 custom-scrollbar content-start flex-1 pb-2">
                                         {(() => {
                                             const provinceKey = Object.keys(PROVINCE_DISPLAY_NAMES).find(
                                                 key => PROVINCE_DISPLAY_NAMES[key] === tempCity
