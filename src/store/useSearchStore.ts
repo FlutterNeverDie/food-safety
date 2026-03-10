@@ -77,7 +77,12 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
       if (data.I2630?.row) {
         let rows: FoodSafetyRow[] = data.I2630.row;
 
-        // 브라우저 단에서 선택한 지역 기반으로 필터링 처리 (시/군, 구 각각 포함 여부 검사)
+        // API 측 검색 파라미터가 무시될 때를 대비해, 브라우저 단에서 식당 이름(keyword)으로 확실히 1차 필터링
+        if (keyword.trim()) {
+          rows = rows.filter(row => row.PRCSCITYPOINT_BSSHNM && row.PRCSCITYPOINT_BSSHNM.includes(keyword.trim()));
+        }
+
+        // 브라우저 단에서 선택한 지역 기반으로 2차 필터링 (시/군, 구 각각 포함 여부 검사)
         if (selectedCity || selectedDistrict) {
           rows = rows.filter(row => {
             if (!row.ADDR) return false;

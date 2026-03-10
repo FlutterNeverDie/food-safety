@@ -30,7 +30,7 @@ export const SearchPage: React.FC = () => {
     // 검색 로직
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (keyword.length >= 2 && selectedCity && selectedDistrict) {
+            if (selectedCity && selectedDistrict) {
                 searchRestaurants(keyword);
             }
         }, 400);
@@ -231,7 +231,17 @@ export const SearchPage: React.FC = () => {
                 <div className="relative group animate-fade-in-up [animation-delay:100ms]">
                     <div className={`absolute inset-x-0 h-[68px] bg-white rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.04)] border transition-all duration-200 ${!selectedDistrict ? 'opacity-50 cursor-not-allowed border-transparent' : 'border-[#E5E8EB] group-focus-within:border-[#3182F6]'}`}></div>
                     <div className="relative flex items-center h-[68px] px-6 z-10 transition-opacity" style={{ opacity: selectedDistrict ? 1 : 0.4 }}>
-                        <Search className={`w-6 h-6 mr-3 ${keyword ? 'text-[#3182F6]' : 'text-[#B0B8C1]'}`} />
+                        <button
+                            onClick={() => {
+                                if (keyword.length >= 1 && selectedCity && selectedDistrict) {
+                                    searchRestaurants(keyword);
+                                }
+                            }}
+                            disabled={!selectedDistrict}
+                            className="outline-none shrink-0 active:scale-90 transition-transform"
+                        >
+                            <Search className={`w-6 h-6 mr-3 ${keyword ? 'text-[#3182F6]' : 'text-[#B0B8C1]'}`} />
+                        </button>
                         <input
                             ref={inputRef}
                             type="text"
@@ -239,6 +249,11 @@ export const SearchPage: React.FC = () => {
                             value={keyword}
                             disabled={!selectedDistrict}
                             onChange={(e) => setKeyword(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && keyword.length >= 1 && selectedCity && selectedDistrict) {
+                                    searchRestaurants(keyword);
+                                }
+                            }}
                             className="flex-1 bg-transparent text-[17px] font-semibold text-[#191F28] placeholder:text-[#B0B8C1] outline-none"
                         />
                         {keyword.length > 0 && (
