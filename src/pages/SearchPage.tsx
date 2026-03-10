@@ -233,7 +233,7 @@ export const SearchPage: React.FC = () => {
                     <div className="relative flex items-center h-[68px] px-6 z-10 transition-opacity" style={{ opacity: selectedDistrict ? 1 : 0.4 }}>
                         <button
                             onClick={() => {
-                                if (keyword.length >= 1 && selectedCity && selectedDistrict) {
+                                if (selectedCity && selectedDistrict) {
                                     searchRestaurants(keyword);
                                 }
                             }}
@@ -250,7 +250,7 @@ export const SearchPage: React.FC = () => {
                             disabled={!selectedDistrict}
                             onChange={(e) => setKeyword(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' && keyword.length >= 1 && selectedCity && selectedDistrict) {
+                                if (e.key === 'Enter' && selectedCity && selectedDistrict) {
                                     searchRestaurants(keyword);
                                 }
                             }}
@@ -265,8 +265,8 @@ export const SearchPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 최근 검색어 / 결과 목록 (동일) */}
-                {keyword.length === 0 ? (
+                {/* 최근 검색어 / 결과 목록 */}
+                {!selectedDistrict ? (
                     <section className="space-y-6 animate-fade-in-up [animation-delay:150ms]">
                         <div className="flex justify-between items-center px-1">
                             <Text className="text-[17px] font-bold text-[#333D4B]">최근 생각하신 식당</Text>

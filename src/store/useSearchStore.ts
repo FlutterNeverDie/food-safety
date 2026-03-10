@@ -59,19 +59,23 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
   searchResults: [],
   isSearching: false,
   searchRestaurants: async (keyword: string) => {
-    if (!keyword.trim()) {
+    const { selectedCity, selectedDistrict } = get();
+    if (!selectedDistrict) {
       set({ searchResults: [] });
       return;
     }
 
-    const { selectedCity, selectedDistrict } = get();
     // API 파라미터 구성 (업소명 기본 검색 + 주소 필터링)
-    let queryParams = `PRCSCITYPOINT_BSSHNM=${encodeURIComponent(keyword)}`;
+    let queryParams = keyword.trim() ? `PRCSCITYPOINT_BSSHNM=${encodeURIComponent(keyword)}` : '';
 
     set({ isSearching: true });
     try {
-      // API에는 업소명만 전달 (존재하지 않는 파라미터 전달 시 404 및 CORS 에러 발생)
-      const response = await fetch(`${BASE_URL}/${API_KEY}/I2630/json/1/1000/${queryParams}`);
+      // API에는 업소명만 전달 (키워드가 없으면 생략)
+      const fetchUrl = queryParams
+        ? `${BASE_URL}/${API_KEY}/I2630/json/1/1000/${queryParams}`
+        : `${BASE_URL}/${API_KEY}/I2630/json/1/1000`;
+
+      const response = await fetch(fetchUrl);
       const data = await response.json();
 
       if (data.I2630?.row) {
