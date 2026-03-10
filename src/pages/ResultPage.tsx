@@ -26,7 +26,7 @@ export const ResultPage: React.FC = () => {
                             <div className="w-8 h-8 bg-[#FFF0F0] rounded-lg flex items-center justify-center text-base shadow-sm border border-[#FFE0E0]">🚨</div>
                             <Text className="text-[17px] font-bold text-[#F04452]">위생 적발 내역</Text>
                         </div>
-                        
+
                         <div className="space-y-6">
                             {selectedRestaurant.raw && selectedRestaurant.raw.length > 0 ? (
                                 selectedRestaurant.raw.map((row, idx) => (
@@ -41,15 +41,6 @@ export const ResultPage: React.FC = () => {
                         </div>
                     </section>
 
-                    {/* 2. 매장 이름 및 정보 (좌측 정렬 강조) */}
-                    <div className="space-y-3 px-1 pt-4">
-                        <Text className="text-[40px] font-bold text-[#191F28] leading-[1.1] tracking-tighter break-all">
-                            {selectedRestaurant.name}
-                        </Text>
-                        <Text className="text-[17px] font-medium text-[#8B95A1] leading-relaxed">
-                            식약처 단속 데이터에 의해 행정처분 이력이<br />확인된 매장입니다.
-                        </Text>
-                    </div>
 
                     {/* 3. 매장 상세 정보 (하단) */}
                     <RestaurantDetailInfo restaurant={selectedRestaurant} />
