@@ -1,0 +1,150 @@
+export interface RegionItem {
+    id: string;   // DB 저장 및 로직 처리용 ID (영문 소문자)
+    name: string; // UI 표시용 이름 (한글)
+}
+
+export interface RegionData {
+    [provinceKey: string]: RegionItem[];
+}
+
+// UI 표시를 위한 광역 자치단체 한글 명칭 매핑
+export const PROVINCE_DISPLAY_NAMES: Record<string, string> = {
+    seoul: '서울',
+    busan: '부산',
+    daegu: '대구',
+    incheon: '인천',
+    gwangju: '광주',
+    daejeon: '대전',
+    ulsan: '울산',
+    sejong: '세종',
+    gyeonggi: '경기',
+    gangwon: '강원',
+    chungbuk: '충북',
+    chungnam: '충남',
+    jeonbuk: '전북',
+    jeonnam: '전남',
+    gyeongbuk: '경북',
+    gyeongnam: '경남',
+    jeju: '제주',
+};
+
+// 전국 행정구역 데이터 (2-Depth 구조)
+export const REGION_DATA: RegionData = {
+    seoul: [
+        { id: 'dobong', name: '도봉구' }, { id: 'gangbuk', name: '강북구' }, { id: 'nowon', name: '노원구' },
+        { id: 'eunpyeong', name: '은평구' }, { id: 'seongbuk', name: '성북구' }, { id: 'jongno', name: '종로구' },
+        { id: 'dongdaemun', name: '동대문구' }, { id: 'jungnang', name: '중랑구' }, { id: 'seodaemun', name: '서대문구' },
+        { id: 'jung', name: '중구' }, { id: 'seongdong', name: '성동구' }, { id: 'gwangjin', name: '광진구' },
+        { id: 'mapo', name: '마포구' }, { id: 'yongsan', name: '용산구' }, { id: 'gangseo', name: '강서구' },
+        { id: 'yangcheon', name: '양천구' }, { id: 'yeongdeungpo', name: '영등포구' }, { id: 'dongjak', name: '동작구' },
+        { id: 'seocho', name: '서초구' }, { id: 'gangnam', name: '강남구' }, { id: 'songpa', name: '송파구' },
+        { id: 'guro', name: '구로구' }, { id: 'geumcheon', name: '금천구' }, { id: 'gwanak', name: '관악구' },
+        { id: 'gangdong', name: '강동구' },
+    ],
+    gyeonggi: [
+        { id: 'suwon', name: '수원시' }, { id: 'seongnam', name: '성남시' }, { id: 'uijeongbu', name: '의정부시' },
+        { id: 'anyang', name: '안양시' }, { id: 'bucheon', name: '부천시' }, { id: 'gwangmyeong', name: '광명시' },
+        { id: 'pyeongtaek', name: '평택시' }, { id: 'dongducheon', name: '동두천시' }, { id: 'ansan', name: '안산시' },
+        { id: 'goyang', name: '고양시' }, { id: 'gwacheon', name: '과천시' }, { id: 'guri', name: '구리시' },
+        { id: 'namyangju', name: '남양주시' }, { id: 'osan', name: '오산시' }, { id: 'siheung', name: '시흥시' },
+        { id: 'gunpo', name: '군포시' }, { id: 'uiwang', name: '의왕시' }, { id: 'hanam', name: '하남시' },
+        { id: 'yongin', name: '용인시' }, { id: 'paju', name: '파주시' }, { id: 'icheon', name: '이천시' },
+        { id: 'anseong', name: '안성시' }, { id: 'gimpo', name: '김포시' }, { id: 'hwaseong', name: '화성시' },
+        { id: 'gwangju', name: '광주시' }, { id: 'yangju', name: '양주시' }, { id: 'pocheon', name: '포천시' },
+        { id: 'yeoju', name: '여주시' }, { id: 'yeoncheon', name: '연천군' }, { id: 'gapyeong', name: '가평군' },
+        { id: 'yangpyeong', name: '양평군' },
+    ],
+    busan: [
+        { id: 'jung', name: '중구' }, { id: 'seo', name: '서구' }, { id: 'dong', name: '동구' },
+        { id: 'yeongdo', name: '영도구' }, { id: 'busanjin', name: '부산진구' }, { id: 'dongnae', name: '동래구' },
+        { id: 'nam', name: '남구' }, { id: 'buk', name: '북구' }, { id: 'haeundae', name: '해운대구' },
+        { id: 'saha', name: '사하구' }, { id: 'geumjeong', name: '금정구' }, { id: 'gangseo', name: '강서구' },
+        { id: 'yeonje', name: '연제구' }, { id: 'suyeong', name: '수영구' }, { id: 'sasang', name: '사상구' },
+        { id: 'gijang', name: '기장군' },
+    ],
+    daegu: [
+        { id: 'jung', name: '중구' }, { id: 'dong', name: '동구' }, { id: 'seo', name: '서구' },
+        { id: 'nam', name: '남구' }, { id: 'buk', name: '북구' }, { id: 'suseong', name: '수성구' },
+        { id: 'dalseo', name: '달서구' }, { id: 'dalseong', name: '달성군' }, { id: 'gunwi', name: '군위군' },
+    ],
+    incheon: [
+        { id: 'jung', name: '중구' }, { id: 'dong', name: '동구' }, { id: 'michuhol', name: '미추홀구' },
+        { id: 'yeonsu', name: '연수구' }, { id: 'namdong', name: '남동구' }, { id: 'bupyeong', name: '부평구' },
+        { id: 'gyeyang', name: '계양구' }, { id: 'seo', name: '서구' }, { id: 'ganghwa', name: '강화군' },
+        { id: 'ongjin', name: '옹진군' },
+    ],
+    gwangju: [
+        { id: 'dong', name: '동구' }, { id: 'seo', name: '서구' }, { id: 'nam', name: '남구' },
+        { id: 'buk', name: '북구' }, { id: 'gwangsan', name: '광산구' },
+    ],
+    daejeon: [
+        { id: 'dong', name: '동구' }, { id: 'jung', name: '중구' }, { id: 'seo', name: '서구' },
+        { id: 'yuseong', name: '유성구' }, { id: 'daedeok', name: '대덕구' },
+    ],
+    ulsan: [
+        { id: 'jung', name: '중구' }, { id: 'nam', name: '남구' }, { id: 'dong', name: '동구' },
+        { id: 'buk', name: '북구' }, { id: 'ulju', name: '울주군' },
+    ],
+    sejong: [
+        { id: 'all', name: '세종시' },
+    ],
+    gangwon: [
+        { id: 'chuncheon', name: '춘천시' }, { id: 'wonju', name: '원주시' }, { id: 'gangneung', name: '강릉시' },
+        { id: 'donghae', name: '동해시' }, { id: 'taebaek', name: '태백시' }, { id: 'sokcho', name: '속초시' },
+        { id: 'samcheok', name: '삼척시' }, { id: 'hongcheon', name: '홍천군' }, { id: 'hoengseong', name: '횡성군' },
+        { id: 'yeongwol', name: '영월군' }, { id: 'pyeongchang', name: '평창군' }, { id: 'jeongseon', name: '정선군' },
+        { id: 'cheorwon', name: '철원군' }, { id: 'hwacheon', name: '화천군' }, { id: 'yanggu', name: '양구군' },
+        { id: 'inje', name: '인제군' }, { id: 'goseong', name: '고성군' }, { id: 'yangyang', name: '양양군' },
+    ],
+    chungbuk: [
+        { id: 'cheongju', name: '청주시' }, { id: 'chungju', name: '충주시' }, { id: 'jecheon', name: '제천시' },
+        { id: 'boeun', name: '보은군' }, { id: 'okcheon', name: '옥천군' }, { id: 'yeongdong', name: '영동군' },
+        { id: 'jeungpyeong', name: '증평군' }, { id: 'jincheon', name: '진천군' }, { id: 'goesan', name: '괴산군' },
+        { id: 'eumseong', name: '음성군' }, { id: 'danyang', name: '단양군' },
+    ],
+    chungnam: [
+        { id: 'cheonan', name: '천안시' }, { id: 'gongju', name: '공주시' }, { id: 'boryeong', name: '보령시' },
+        { id: 'asan', name: '아산시' }, { id: 'seosan', name: '서산시' }, { id: 'nonsan', name: '논산시' },
+        { id: 'gyeryong', name: '계룡시' }, { id: 'dangjin', name: '당진시' }, { id: 'geumsan', name: '금산군' },
+        { id: 'buyeo', name: '부여군' }, { id: 'seocheon', name: '서천군' }, { id: 'cheongyang', name: '청양군' },
+        { id: 'hongseong', name: '홍성군' }, { id: 'yesan', name: '예산군' }, { id: 'taean', name: '태안군' },
+    ],
+    jeonbuk: [
+        { id: 'jeonju', name: '전주시' }, { id: 'gunsan', name: '군산시' }, { id: 'iksan', name: '익산시' },
+        { id: 'jeongeup', name: '정읍시' }, { id: 'namwon', name: '남원시' }, { id: 'gimje', name: '김제시' },
+        { id: 'wanju', name: '완주군' }, { id: 'jinan', name: '진안군' }, { id: 'muju', name: '무주군' },
+        { id: 'jangsu', name: '장수군' }, { id: 'imsil', name: '임실군' }, { id: 'sunchang', name: '순창군' },
+        { id: 'gochang', name: '고창군' }, { id: 'buan', name: '부안군' },
+    ],
+    jeonnam: [
+        { id: 'mokpo', name: '목포시' }, { id: 'yeosu', name: '여수시' }, { id: 'suncheon', name: '순천시' },
+        { id: 'naju', name: '나주시' }, { id: 'gwangyang', name: '광양시' }, { id: 'damyang', name: '담양군' },
+        { id: 'gokseong', name: '곡성군' }, { id: 'gurye', name: '구례군' }, { id: 'goheung', name: '고흥군' },
+        { id: 'boseong', name: '보성군' }, { id: 'hwasun', name: '화순군' }, { id: 'jangheung', name: '장흥군' },
+        { id: 'gangjin', name: '강진군' }, { id: 'haenam', name: '해남군' }, { id: 'yeongam', name: '영암군' },
+        { id: 'muan', name: '무안군' }, { id: 'hampyeong', name: '함평군' }, { id: 'yeonggwang', name: '영광군' },
+        { id: 'jangseong', name: '장성군' }, { id: 'wando', name: '완도군' }, { id: 'jindo', name: '진도군' },
+        { id: 'sinan', name: '신안군' },
+    ],
+    gyeongbuk: [
+        { id: 'pohang', name: '포항시' }, { id: 'gyeongju', name: '경주시' }, { id: 'gimcheon', name: '김천시' },
+        { id: 'andong', name: '안동시' }, { id: 'gumi', name: '구미시' }, { id: 'yeongju', name: '영주시' },
+        { id: 'sangju', name: '상주시' }, { id: 'mungyeong', name: '문경시' }, { id: 'gyeongsan', name: '경산시' },
+        { id: 'uiseong', name: '의성군' }, { id: 'cheongsong', name: '청송군' }, { id: 'yeongyang', name: '영양군' },
+        { id: 'cheongdo', name: '청도군' }, { id: 'goryeong', name: '고령군' }, { id: 'seongju', name: '성주군' },
+        { id: 'chilgok', name: '칠곡군' }, { id: 'yecheon', name: '예천군' }, { id: 'bonghwa', name: '봉화군' },
+        { id: 'uljin', name: '울진군' }, { id: 'ulleung', name: '울릉군' }, { id: 'yeongdeok', name: '영덕군' },
+        { id: 'yeongcheon', name: '영천시' },
+    ],
+    gyeongnam: [
+        { id: 'changwon', name: '창원시' }, { id: 'jinju', name: '진주시' }, { id: 'tongyeong', name: '통영시' },
+        { id: 'sacheon', name: '사천시' }, { id: 'gimhae', name: '김해시' }, { id: 'miryang', name: '밀양시' },
+        { id: 'geoje', name: '거제시' }, { id: 'yangsan', name: '양산시' }, { id: 'uiryeong', name: '의령군' },
+        { id: 'haman', name: '함안군' }, { id: 'changnyeong', name: '창녕군' }, { id: 'goseong', name: '고성군' },
+        { id: 'namhae', name: '남해군' }, { id: 'hadong', name: '하동군' }, { id: 'sancheong', name: '산청군' },
+        { id: 'hamyang', name: '함양군' }, { id: 'geochang', name: '거창군' }, { id: 'hapcheon', name: '합천군' },
+    ],
+    jeju: [
+        { id: 'jeju', name: '제주시' }, { id: 'seogwipo', name: '서귀포시' },
+    ],
+};
