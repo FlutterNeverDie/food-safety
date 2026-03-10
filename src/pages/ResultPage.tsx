@@ -33,28 +33,45 @@ export const ResultPage: React.FC = () => {
                             <div className="w-8 h-8 bg-[#FFF0F0] rounded-lg flex items-center justify-center text-base shadow-sm border border-[#FFE0E0]">🚨</div>
                             <Text className="text-[17px] font-bold text-[#F04452]">위생 적발 내역</Text>
                         </div>
-                        
+
                         <div className="space-y-6">
                             {selectedRestaurant.raw && selectedRestaurant.raw.length > 0 ? (
                                 selectedRestaurant.raw.map((row, idx) => (
                                     <div key={idx} className="bg-white border border-[#F2F4F6] rounded-[32px] p-8 space-y-7 shadow-[0_8px_20px_rgba(0,0,0,0.02)]">
-                                        <div className="flex items-center justify-between pb-5 border-b border-[#F2F4F6]">
-                                            <div className="px-3.5 py-1.5 bg-[#FFF0F0] text-[#F04452] rounded-xl text-[13px] font-bold tracking-tight">
-                                                {row.DSPS_TYPECD_NM}
+                                        <div className="flex flex-col gap-5 pb-5 border-b border-[#F2F4F6]">
+                                            <div className="flex items-center justify-between">
+                                                <div className="px-3.5 py-1.5 bg-[#FFF0F0] text-[#F04452] rounded-xl text-[13px] font-bold tracking-tight">
+                                                    {row.DSPS_TYPECD_NM}
+                                                </div>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <Text className="text-[11px] font-bold text-[#B0B8C1] uppercase tracking-wider text-right">처분 확정일</Text>
+                                                    <div className="flex items-center gap-1.5 text-[#8B95A1]">
+                                                        <Calendar className="w-3.5 h-3.5" />
+                                                        <Text className="text-[14px] font-bold">{formatDate(row.DSPS_DCSNDT)}</Text>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center gap-1.5 text-[#B0B8C1]">
-                                                <Calendar className="w-3.5 h-3.5" />
-                                                <Text className="text-[14px] font-bold">{formatDate(row.DSPS_DCSNDT)}</Text>
-                                            </div>
+
+                                            {/* 적발일 정보 별도 표시 */}
+                                            {row.VILTCN.match(/^\(\d{8}\)/) && (
+                                                <div className="flex items-center gap-2 px-1">
+                                                    <span className="text-[12px] font-bold text-[#4E5968] bg-[#F2F4F6] px-2.5 py-1 rounded-lg">적발 시점</span>
+                                                    <Text className="text-[14px] font-medium text-[#4E5968]">
+                                                        {formatDate(row.VILTCN.match(/\d{8}/)?.[0])}
+                                                    </Text>
+                                                </div>
+                                            )}
                                         </div>
-                                        
+
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-2 h-2 bg-[#F04452] rounded-full" />
                                                 <Text className="text-[15px] font-bold text-[#8B95A1]">위반 내용</Text>
                                             </div>
                                             <div className="bg-[#F9FAFB] p-6 rounded-[24px] border border-[#F2F4F6]/50">
-                                                <Text className="text-[16px] text-[#4E5968] leading-relaxed font-semibold break-keep">{row.VILTCN}</Text>
+                                                <Text className="text-[16px] text-[#4E5968] leading-relaxed font-semibold break-keep">
+                                                    {row.VILTCN.replace(/^\(\d{8}\)/, '').trim()}
+                                                </Text>
                                             </div>
                                         </div>
 
@@ -77,16 +94,6 @@ export const ResultPage: React.FC = () => {
                             )}
                         </div>
                     </section>
-
-                    {/* 2. 매장 이름 (가장 크게 강조) */}
-                    <div className="space-y-3 px-1 pt-4">
-                        <Text className="text-[40px] font-bold text-[#191F28] leading-[1.1] tracking-tighter break-all">
-                            {selectedRestaurant.name}
-                        </Text>
-                        <Text className="text-[17px] font-medium text-[#8B95A1] leading-relaxed">
-                            식약처 단속 데이터에 의해 행정처분 이력이<br />확인된 매장입니다.
-                        </Text>
-                    </div>
 
                     {/* 3. 매장 상세 정보 (하단) */}
                     <section className="bg-white rounded-[28px] p-8 border border-[#F2F4F6] space-y-7 shadow-sm">
