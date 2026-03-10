@@ -68,19 +68,26 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
     // API 파라미터 구성 (업소명 기본 검색 + 주소 필터링)
     let queryParams = `PRCSCITYPOINT_BSSHNM=${encodeURIComponent(keyword)}`;
 
-    // 지역 정보가 있으면 ADDR 파라미터 추가
-    if (selectedCity || selectedDistrict) {
-      const addrValue = [selectedCity, selectedDistrict].filter(Boolean).join(' ');
-      queryParams += `/ADDR=${encodeURIComponent(addrValue)}`;
-    }
-
     set({ isSearching: true });
     try {
-      const response = await fetch(`${BASE_URL}/${API_KEY}/I2630/json/1/100/${queryParams}`);
+      // API에는 업소명만 전달 (존재하지 않는 파라미터 전달 시 404 및 CORS 에러 발생)
+      const response = await fetch(`${BASE_URL}/${API_KEY}/I2630/json/1/1000/${queryParams}`);
       const data = await response.json();
 
       if (data.I2630?.row) {
-        const rows: FoodSafetyRow[] = data.I2630.row;
+        let rows: FoodSafetyRow[] = data.I2630.row;
+
+        // 브라우저 단에서 선택한 지역 기반으로 필터링 처리 (시/군, 구 각각 포함 여부 검사)
+        if (selectedCity || selectedDistrict) {
+          rows = rows.filter(row => {
+            if (!row.ADDR) return false;
+            // API는 '서울특별시 광진구' 형태로 주소를 반환하므로 '서울 광진구'로 통째로 비교하면 안됨
+            const matchCity = selectedCity ? row.ADDR.includes(selectedCity) : true;
+            const matchDistrict = selectedDistrict ? row.ADDR.includes(selectedDistrict) : true;
+            return matchCity && matchDistrict;
+          });
+        }
+
         const grouped = rows.reduce((acc: Record<string, FoodSafetyRow[]>, char) => {
           const name = char.PRCSCITYPOINT_BSSHNM;
           if (!acc[name]) acc[name] = [];

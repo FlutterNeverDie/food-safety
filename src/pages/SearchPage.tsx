@@ -188,9 +188,16 @@ export const SearchPage: React.FC = () => {
 
     return (
         <div className="app-container !bg-[#F9FAFB]">
-            <div className="px-6 pt-20 pb-12 flex flex-col items-center text-center space-y-3 animate-fade-in-up">
+            <div className="px-6 pt-16 pb-10 flex flex-col items-center text-center space-y-4 animate-fade-in-up">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF0F0] rounded-full shadow-sm">
+                    <AlertCircle className="w-3.5 h-3.5 text-[#F04452]" />
+                    <Text className="text-[12px] font-bold text-[#F04452]">식약처 위생 적발 이력 데이터</Text>
+                </div>
                 <Text className="text-[28px] font-bold leading-[1.3] text-[#191F28] tracking-tight">
                     어떤 식당의 위생이<br />궁금하신가요?
+                </Text>
+                <Text className="text-[14px] text-[#8B95A1] font-medium">
+                    과거에 단속된 적이 있는 식당만 검색됩니다.
                 </Text>
             </div>
 
@@ -293,14 +300,18 @@ export const SearchPage: React.FC = () => {
                                 </div>
                             ))}
                             {!isSearching && searchResults.length === 0 && (
-                                <div className="py-24 text-center px-4 bg-white rounded-[32px] border border-[#F2F4F6]">
-                                    <div className="w-20 h-20 bg-[#F2F4F6] rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <ShieldCheck className="w-10 h-10 text-[#8B95A1]" />
+                                <div className="py-16 px-6 bg-white rounded-[32px] border border-[#F2F4F6] text-center shadow-sm">
+                                    <div className="w-20 h-20 bg-[#E8F8F0] rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <ShieldCheck className="w-10 h-10 text-[#00D082]" />
                                     </div>
-                                    <Text className="text-[20px] font-bold text-[#191F28] mb-2">적발 이력이 없어요</Text>
-                                    <Text className="text-[14px] text-[#8B95A1] font-medium leading-relaxed">
-                                        입력하신 조건과 일치하는<br />위생 적발 이력이 존재하지 않습니다.
-                                    </Text>
+                                    <div className="bg-[#F9FAFB] rounded-[20px] p-5 text-left border border-[#F2F4F6]">
+                                        <Text className="text-[14px] text-[#4E5968] font-medium leading-[1.6] block mb-2">
+                                            ✔ 검색하신 조건의 <span className="text-[#3182F6] font-bold">위생 적발 이력이 없습니다.</span>
+                                        </Text>
+                                        <Text className="text-[14px] text-[#4E5968] font-medium leading-[1.6] block truncate whitespace-normal">
+                                            ✔ 본 서비스는 식약처에 단속된 식당만 조회됩니다. <span className="font-bold">검색되지 않았다면, 최근 위생 점검에서 문제가 없었던 안전한 식당입니다.</span>
+                                        </Text>
+                                    </div>
                                 </div>
                             )}
                         </div>
