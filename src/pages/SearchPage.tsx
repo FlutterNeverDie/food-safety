@@ -59,6 +59,7 @@ export const SearchPage: React.FC = () => {
             const handleDistrictClick = (name: string) => {
                 setSelectedCity(tempCity);
                 setSelectedDistrict(name);
+                addRecentSearch(`${tempCity} ${name}`); // 최근 검색 지역에 추가
                 handleClose();
             };
 
@@ -265,27 +266,45 @@ export const SearchPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 최근 검색어 / 결과 목록 */}
+                {/* 최근 검색 지역 */}
                 {!selectedDistrict ? (
                     <section className="space-y-6 animate-fade-in-up [animation-delay:150ms]">
                         <div className="flex justify-between items-center px-1">
-                            <Text className="text-[17px] font-bold text-[#333D4B]">최근 생각하신 식당</Text>
+                            <Text className="text-[17px] font-bold text-[#333D4B]">최근 검색한 지역</Text>
                             {recentSearches.length > 0 && (
                                 <button onClick={clearRecentSearches} className="text-[14px] font-bold text-[#3182F6]">모두 지우기</button>
                             )}
                         </div>
                         <div className="flex flex-wrap gap-2.5">
                             {recentSearches.length > 0 ? (
-                                recentSearches.map((name) => (
-                                    <div key={name} className="flex items-center gap-1.5 px-5 py-3 bg-white border border-[#E5E8EB] rounded-full cursor-pointer active:scale-95 shadow-sm" onClick={() => setKeyword(name)}>
-                                        <Text className="text-[15px] font-bold text-[#4E5968]">{name}</Text>
-                                        <button onClick={(e) => { e.stopPropagation(); removeRecentSearch(name); }} className="text-[#B0B8C1]"><X className="w-3 h-3" /></button>
-                                    </div>
-                                ))
+                                recentSearches.map((region) => {
+                                    const [city, district] = region.split(' ');
+                                    return (
+                                        <div 
+                                            key={region} 
+                                            className="flex items-center gap-1.5 px-5 py-3 bg-white border border-[#E5E8EB] rounded-full cursor-pointer active:scale-95 shadow-sm" 
+                                            onClick={() => {
+                                                setSelectedCity(city);
+                                                setSelectedDistrict(district);
+                                            }}
+                                        >
+                                            <Text className="text-[15px] font-bold text-[#4E5968]">{region}</Text>
+                                            <button 
+                                                onClick={(e) => { 
+                                                    e.stopPropagation(); 
+                                                    removeRecentSearch(region); 
+                                                }} 
+                                                className="text-[#B0B8C1]"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    );
+                                })
                             ) : (
                                 <div className="w-full py-16 flex flex-col items-center justify-center bg-white rounded-[32px] border border-[#F2F4F6]">
                                     <Map className="w-10 h-10 text-[#E5E8EB] mb-4" />
-                                    <p className="text-[#B0B8C1] font-bold text-center text-[14px]">지역을 선택하고<br />식당을 검색해보세요.</p>
+                                    <p className="text-[#B0B8C1] font-bold text-center text-[14px]">지역을 선택하시면<br />최근 검색한 내역에 저장돼요.</p>
                                 </div>
                             )}
                         </div>
