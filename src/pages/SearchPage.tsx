@@ -299,14 +299,13 @@ export const SearchPage: React.FC = () => {
                             {filteredResults.map((res) => (
                                 <div key={res.id} onClick={() => handleRestaurantClick(res)} className="p-6 bg-white border border-[#F2F4F6] rounded-[28px] flex items-center justify-between active:scale-[0.98] cursor-pointer shadow-sm">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 bg-[#FFF0F0] rounded-[20px] flex items-center justify-center text-2xl">🚨</div>
+                                        <div className="w-14 h-14 bg-[#FFF0F0] rounded-full flex items-center justify-center text-2xl">🚨</div>
                                         <div className="space-y-1.5">
                                             <div className="flex items-center gap-2">
                                                 <Text className="text-[17px] font-bold text-[#191F28]">{res.name}</Text>
                                                 <span className="text-[10px] font-bold text-[#3182F6] bg-blue-50 px-2 py-0.5 rounded-full">{res.category}</span>
                                             </div>
                                             <div className="flex items-center gap-1 text-[#8B95A1]">
-                                                <MapPin className="w-3 h-3" />
                                                 <Text className="text-[13px] font-medium line-clamp-1">{res.address}</Text>
                                             </div>
                                         </div>
