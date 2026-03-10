@@ -45,9 +45,6 @@ export const ResultPage: React.FC = () => {
                     <section className="space-y-4">
                         <div className="flex items-center justify-between px-1">
                             <Text className="text-[18px] font-bold text-[#333D4B]">상세 적발 기록</Text>
-                            <Text className="text-[13px] font-bold text-[#F04452] bg-[#FFF0F0] px-2.5 py-1 rounded-full">
-                                총 {selectedRestaurant.raw?.length || 0}건
-                            </Text>
                         </div>
                         <div className="space-y-5">
                             {selectedRestaurant.raw && selectedRestaurant.raw.length > 0 ? (
