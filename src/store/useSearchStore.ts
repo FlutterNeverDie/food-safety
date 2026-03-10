@@ -37,7 +37,7 @@ interface SearchStore {
   setSelectedRestaurant: (restaurant: Restaurant | null) => void;
   searchResults: Restaurant[];
   isSearching: boolean;
-  searchRestaurants: (keyword: string) => Promise<void>;
+  searchRestaurants: () => Promise<void>;
   recentSearches: string[];
   addRecentSearch: (name: string) => void;
   removeRecentSearch: (name: string) => void;
@@ -58,33 +58,23 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
   setSelectedRestaurant: (restaurant) => set({ selectedRestaurant: restaurant }),
   searchResults: [],
   isSearching: false,
-  searchRestaurants: async (keyword: string) => {
+  searchRestaurants: async () => {
     const { selectedCity, selectedDistrict } = get();
     if (!selectedDistrict) {
       set({ searchResults: [] });
       return;
     }
 
-    // API 파라미터 구성 (업소명 기본 검색 + 주소 필터링)
-    let queryParams = keyword.trim() ? `PRCSCITYPOINT_BSSHNM=${encodeURIComponent(keyword)}` : '';
-
     set({ isSearching: true });
     try {
-      // API에는 업소명만 전달 (키워드가 없으면 생략)
-      const fetchUrl = queryParams
-        ? `${BASE_URL}/${API_KEY}/I2630/json/1/1000/${queryParams}`
-        : `${BASE_URL}/${API_KEY}/I2630/json/1/1000`;
+      // API 요청 시 지역 필터는 클라이언트에서 처리하므로 최신 1,000건을 한 번에 모두 가져옴
+      const fetchUrl = `${BASE_URL}/${API_KEY}/I2630/json/1/1000`;
 
       const response = await fetch(fetchUrl);
       const data = await response.json();
 
       if (data.I2630?.row) {
         let rows: FoodSafetyRow[] = data.I2630.row;
-
-        // API 측 검색 파라미터가 무시될 때를 대비해, 브라우저 단에서 식당 이름(keyword)으로 확실히 1차 필터링
-        if (keyword.trim()) {
-          rows = rows.filter(row => row.PRCSCITYPOINT_BSSHNM && row.PRCSCITYPOINT_BSSHNM.includes(keyword.trim()));
-        }
 
         // 브라우저 단에서 선택한 지역 기반으로 2차 필터링 (시/군, 구 각각 포함 여부 검사)
         if (selectedCity || selectedDistrict) {

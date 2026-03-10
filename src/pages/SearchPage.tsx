@@ -27,15 +27,17 @@ export const SearchPage: React.FC = () => {
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // 검색 로직
+    // 검색 로직 (선택된 지역이 있을 때 지역 데이터 최초 1회 패치)
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (selectedCity && selectedDistrict) {
-                searchRestaurants(keyword);
-            }
-        }, 400);
-        return () => clearTimeout(timer);
-    }, [keyword, searchRestaurants, selectedCity, selectedDistrict]);
+        if (selectedCity && selectedDistrict) {
+            searchRestaurants();
+        }
+    }, [searchRestaurants, selectedCity, selectedDistrict]);
+
+    // 입력한 키워드를 기반으로 브라우저에서 실시간 결과 필터링
+    const filteredResults = searchResults.filter(res =>
+        res.name.includes(keyword.trim())
+    );
 
     // 지역 선택 다이얼로그 (내부 상태 관리를 위한 래퍼 컴포넌트)
     const openRegionPicker = () => {
@@ -233,9 +235,7 @@ export const SearchPage: React.FC = () => {
                     <div className="relative flex items-center h-[68px] px-6 z-10 transition-opacity" style={{ opacity: selectedDistrict ? 1 : 0.4 }}>
                         <button
                             onClick={() => {
-                                if (selectedCity && selectedDistrict) {
-                                    searchRestaurants(keyword);
-                                }
+                                // 로컬 필터링이므로 별도 API 재요청 안함, 단지 포커스 이동 등의 시각적 효과만
                             }}
                             disabled={!selectedDistrict}
                             className="outline-none shrink-0 active:scale-90 transition-transform"
@@ -250,8 +250,8 @@ export const SearchPage: React.FC = () => {
                             disabled={!selectedDistrict}
                             onChange={(e) => setKeyword(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' && selectedCity && selectedDistrict) {
-                                    searchRestaurants(keyword);
+                                if (e.key === 'Enter') {
+                                    inputRef.current?.blur();
                                 }
                             }}
                             className="flex-1 bg-transparent text-[17px] font-semibold text-[#191F28] placeholder:text-[#B0B8C1] outline-none"
@@ -293,10 +293,10 @@ export const SearchPage: React.FC = () => {
                 ) : (
                     <section className="space-y-4 animate-fade-in-up">
                         <div className="flex items-center justify-between px-1">
-                            <Text className="text-[14px] font-bold text-[#8B95A1]">{isSearching ? '조회 중...' : `검색 결과 ${searchResults.length}개`}</Text>
+                            <Text className="text-[14px] font-bold text-[#8B95A1]">{isSearching ? '조회 중...' : `검색 결과 ${filteredResults.length}개`}</Text>
                         </div>
                         <div className="grid gap-3 pb-24">
-                            {searchResults.map((res) => (
+                            {filteredResults.map((res) => (
                                 <div key={res.id} onClick={() => handleRestaurantClick(res)} className="p-6 bg-white border border-[#F2F4F6] rounded-[28px] flex items-center justify-between active:scale-[0.98] cursor-pointer shadow-sm">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 bg-[#FFF0F0] rounded-[20px] flex items-center justify-center text-2xl">🚨</div>
@@ -314,7 +314,7 @@ export const SearchPage: React.FC = () => {
                                     <ChevronRight className="w-5 h-5 text-[#D1D6DB]" />
                                 </div>
                             ))}
-                            {!isSearching && searchResults.length === 0 && (
+                            {!isSearching && filteredResults.length === 0 && (
                                 <div className="py-16 px-6 bg-white rounded-[32px] border border-[#F2F4F6] text-center shadow-sm">
                                     <div className="w-20 h-20 bg-[#E8F8F0] rounded-full flex items-center justify-center mx-auto mb-6">
                                         <ShieldCheck className="w-10 h-10 text-[#00D082]" />
