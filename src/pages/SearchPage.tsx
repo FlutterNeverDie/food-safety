@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Text } from '@toss/tds-mobile';
 import { useOverlay } from '@toss/use-overlay';
 import { useSearchStore, type Restaurant } from '../store/useSearchStore';
-import { Search, Loader2, MapPin, ChevronRight, AlertCircle, CheckCircle2, X, Map, ChevronDown } from 'lucide-react';
+import { Search, Loader2, MapPin, ChevronRight, AlertCircle, CheckCircle2, X, Map, ChevronDown, ShieldCheck } from 'lucide-react';
 import { REGION_DATA, PROVINCE_DISPLAY_NAMES } from '../data/constants/regions';
 
 export const SearchPage: React.FC = () => {
@@ -294,10 +294,13 @@ export const SearchPage: React.FC = () => {
                             ))}
                             {!isSearching && searchResults.length === 0 && (
                                 <div className="py-24 text-center px-4 bg-white rounded-[32px] border border-[#F2F4F6]">
-                                    <div className="w-20 h-20 bg-[#E8F8F0] rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <CheckCircle2 className="w-10 h-10 text-[#00D082]" />
+                                    <div className="w-20 h-20 bg-[#F2F4F6] rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <ShieldCheck className="w-10 h-10 text-[#8B95A1]" />
                                     </div>
-                                    <Text className="text-[20px] font-bold text-[#191F28]">안심 식당이에요!</Text>
+                                    <Text className="text-[20px] font-bold text-[#191F28] mb-2">적발 이력이 없어요</Text>
+                                    <Text className="text-[14px] text-[#8B95A1] font-medium leading-relaxed">
+                                        입력하신 조건과 일치하는<br />위생 적발 이력이 존재하지 않습니다.
+                                    </Text>
                                 </div>
                             )}
                         </div>
