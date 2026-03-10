@@ -67,7 +67,7 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
 
     set({ isSearching: true });
     try {
-      // API 요청 시 지역 필터는 클라이언트에서 처리하므로 최신 1,000건을 한 번에 모두 가져옴
+      // API 데이터는 시/군/구만 필터링해서 가져오고 키워드 검색은 앱 내부에서 처리함
       const fetchUrl = `${BASE_URL}/${API_KEY}/I2630/json/1/1000`;
 
       const response = await fetch(fetchUrl);
