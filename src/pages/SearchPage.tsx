@@ -67,11 +67,11 @@ export const SearchPage: React.FC = () => {
 
             return (
                 <div
-                    className={`fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                    className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                     onClick={handleClose}
                 >
                     <div
-                        className="w-full max-w-md bg-white rounded-[32px] p-6 pb-8 space-y-6 flex flex-col transform transition-all animate-in slide-in-from-bottom-full duration-300 shadow-2xl h-[55vh] min-h-[420px] max-h-[600px]"
+                        className={`w-full max-w-md bg-white rounded-[32px] p-6 pb-8 space-y-6 flex flex-col transform transition-all duration-300 shadow-2xl h-[55vh] min-h-[420px] max-h-[600px] ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* 헤더 */}
@@ -149,11 +149,11 @@ export const SearchPage: React.FC = () => {
 
             return (
                 <div
-                    className={`fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                    className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                     onClick={handleClose}
                 >
                     <div
-                        className="w-full max-w-md bg-white rounded-[32px] p-8 pb-10 text-center space-y-8 transform transition-all animate-in slide-in-from-bottom-full duration-300 shadow-2xl"
+                        className={`w-full max-w-md bg-white rounded-[32px] p-8 pb-10 text-center space-y-8 transform transition-all duration-300 shadow-2xl ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-center">
