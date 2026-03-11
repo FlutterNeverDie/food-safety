@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTossRewardAd } from '../hooks/useTossRewardAd';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@toss/tds-mobile';
 import { useOverlay } from '@toss/use-overlay';
@@ -30,6 +31,8 @@ export const SearchPage: React.FC = () => {
     const navigate = useNavigate();
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
+    const AD_GROUP_ID = 'ait.dev.43daa14da3ae487b'; // 테스트/기본 보상형 광고 ID
+    const { showAd } = useTossRewardAd(AD_GROUP_ID);
 
     // 검색 로직 (선택된 지역이 있을 때 데이터 패치)
     useEffect(() => {
@@ -91,7 +94,7 @@ export const SearchPage: React.FC = () => {
 
                         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
                             {step === 'city' ? (
-                                <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 custom-scrollbar">
+                                <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 custom-scrollbar">
                                     {Object.entries(PROVINCE_DISPLAY_NAMES).map(([key, name]) => (
                                         <button
                                             key={key}
@@ -107,7 +110,7 @@ export const SearchPage: React.FC = () => {
                                     <button onClick={() => setStep('city')} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E8F3FF] rounded-full text-[13px] font-bold text-[#3182F6] self-start">
                                         <ChevronRight className="w-4 h-4 rotate-180" /> 처음부터 다시
                                     </button>
-                                    <div className="grid grid-cols-3 gap-3 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                                    <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 flex-1 custom-scrollbar">
                                         {(() => {
                                             const provinceKey = Object.keys(PROVINCE_DISPLAY_NAMES).find(key => PROVINCE_DISPLAY_NAMES[key] === tempCity);
                                             return provinceKey ? REGION_DATA[provinceKey].map(r => (
@@ -130,13 +133,20 @@ export const SearchPage: React.FC = () => {
         });
     };
 
-    // 식당 클릭 다이얼로그
+    // 식당 클릭 다이얼로그 (광고 연동 포함)
     const handleRestaurantClick = (restaurant: Restaurant) => {
         setSelectedRestaurant(restaurant);
         overlay.open(({ isOpen, close, exit }) => {
             const handleClose = () => {
                 close();
                 setTimeout(() => { if (typeof exit === 'function') exit(); }, 300);
+            };
+
+            const handleShowAd = () => {
+                showAd(() => {
+                    handleClose();
+                    navigate('/result');
+                });
             };
 
             return (
@@ -190,8 +200,8 @@ export const SearchPage: React.FC = () => {
 
                         <div className="space-y-3 pt-2">
                             <button
-                                className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.97] transition-all"
-                                onClick={() => { handleClose(); navigate('/result'); }}
+                                className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.97] transition-all shadow-xl shadow-blue-100"
+                                onClick={handleShowAd}
                             >
                                 상세 내역 전체보기
                             </button>

@@ -77,30 +77,28 @@ export const SearchResultSection: React.FC<Props> = ({
                     <div 
                         key={res.id} 
                         onClick={() => onRestaurantClick(res)} 
-                        className="p-6 bg-white border border-[#F2F4F6] rounded-[32px] flex items-center justify-between active:scale-[0.98] cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+                        className="w-full box-border overflow-hidden p-4 sm:p-5 bg-white border border-[#F2F4F6] rounded-[28px] flex items-center gap-3 sm:gap-4 active:scale-[0.98] cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                     >
-                        <div className="flex items-center gap-3 sm:gap-5 flex-1 min-w-0">
-                            {/* 아이콘: 작은 화면에서는 크기를 살짝 줄임 */}
-                            <div className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] bg-[#FFF0F0] rounded-full flex items-center justify-center text-2xl sm:text-3xl shrink-0 group-hover:scale-110 transition-transform">🚨</div>
-                            
-                            {/* 텍스트 정보 */}
-                            <div className="flex flex-col gap-1.5 flex-1 min-w-0 sm:pr-2">
-                                {/* 가로 넘침(Overflow) 완벽 차단 */}
-                                <div className="flex items-center justify-between gap-2.5 sm:gap-3 w-full min-w-0">
-                                    {/* truncate가 동작하려면 부모-자식 모두 min-w-0 이 필요함 */}
-                                    <div className="flex-1 min-w-0 text-[18px] sm:text-[20px] font-semibold text-[#3182F6] tracking-tight truncate">{res.name}</div>
-                                    <span className="shrink-0 text-[11px] font-bold text-[#3182F6] bg-[#E8F3FF] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-[#3182F6]/10">
-                                        {res.category}
-                                    </span>
-                                </div>
-                                <p className="mt-0.5 text-[14px] sm:text-[15px] font-medium text-[#8B95A1] leading-snug tracking-tight line-clamp-2 break-keep">
-                                    {res.address}
-                                </p>
+                        {/* 아이콘: 모바일 환경에 대응하기 위해 불필요한 크기 팽창 억제 */}
+                        <div className="w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] bg-[#FFF0F0] rounded-full flex items-center justify-center text-2xl sm:text-3xl shrink-0 group-hover:scale-110 transition-transform">🚨</div>
+                        
+                        {/* 텍스트 정보 (확실히 줄어들게 flex-1 min-w-0 강제) */}
+                        <div className="flex flex-col gap-1 flex-1 min-w-0">
+                            {/* 가로 넘침(Overflow) 완벽 차단용 w-full min-w-0 */}
+                            <div className="flex items-center justify-between gap-2 w-full min-w-0">
+                                {/* truncate가 확실히 동작하도록 flex-1 min-w-0 박스 설정 */}
+                                <div className="flex-1 min-w-0 text-[18px] sm:text-[19px] font-semibold text-[#3182F6] tracking-tight truncate flex items-center">{res.name}</div>
+                                <span className="shrink-0 text-[11px] font-bold text-[#3182F6] bg-[#E8F3FF] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-[#3182F6]/10">
+                                    {res.category}
+                                </span>
                             </div>
+                            <p className="mt-0.5 text-[14px] sm:text-[15px] font-medium text-[#8B95A1] leading-snug tracking-tight line-clamp-2 break-all text-left">
+                                {res.address}
+                            </p>
                         </div>
 
-                        {/* 우측 화살표 */}
-                        <ChevronRight className="w-5 h-5 text-[#D1D6DB] shrink-0 ml-1.5 sm:ml-2" />
+                        {/* 우측 화살표 (공간 최소화로 우측 잘림 방지) */}
+                        <ChevronRight className="w-5 h-5 text-[#D1D6DB] shrink-0" />
                     </div>
                 ))}
                 {!isSearching && filteredResults.length === 0 && (
