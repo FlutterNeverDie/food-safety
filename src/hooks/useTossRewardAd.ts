@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { loadFullScreenAd, showFullScreenAd } from '@apps-in-toss/web-framework';
 
 // Fallback 처리를 위한 isSupported 안전 호출 함수
@@ -15,9 +15,16 @@ const safeIsSupported = (method: any) => {
 
 export const useTossRewardAd = (adGroupId: string) => {
     const [isAdLoaded, setIsAdLoaded] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    
+    // JS 클로저 버그(이전 렌더링 값 유지) 방지용 Ref
+    const isAdLoadedRef = useRef(false);
+    
+    // 컴포넌트 마운트 초기에 지원 여부를 평가
+    const isSupported = safeIsSupported(loadFullScreenAd) && safeIsSupported(showFullScreenAd);
 
     const preloadAd = useCallback(() => {
-        if (!safeIsSupported(loadFullScreenAd)) {
+        if (!isSupported) {
             return () => {};
         }
 
@@ -27,18 +34,22 @@ export const useTossRewardAd = (adGroupId: string) => {
                 onEvent: (event) => {
                     if (event.type === 'loaded') {
                         setIsAdLoaded(true);
+                        isAdLoadedRef.current = true;
+                        setHasError(false);
                     }
                 },
                 onError: (error) => {
                     console.error('광고 로드 실패:', error);
+                    setHasError(true);
                 }
             });
             return unregister;
         } catch (error) {
             console.error('광고 로드 중 예상치 못한 에러:', error);
+            setHasError(true);
             return () => {};
         }
-    }, [adGroupId]);
+    }, [adGroupId, isSupported]);
 
     useEffect(() => {
         const unregister = preloadAd();
@@ -49,7 +60,9 @@ export const useTossRewardAd = (adGroupId: string) => {
 
     const showAd = useCallback((onComplete: () => void, onDismissed?: () => void) => {
         // 미지원 기기이거나 로드가 안 된 상태이면 Fallback: 바로 진행
-        if (!isAdLoaded || !safeIsSupported(showFullScreenAd)) {
+        // isAdLoadedRef를 확인하여 closure 밖에서의 최신 상태를 보장
+        if (!isSupported || !isAdLoadedRef.current) {
+            console.warn('Fallback으로 이동:', { isSupported, isAdLoaded: isAdLoadedRef.current });
             onComplete();
             return;
         }
@@ -67,6 +80,7 @@ export const useTossRewardAd = (adGroupId: string) => {
                         case 'dismissed':
                             // 사용자가 창을 중도에 닫음 (다음 노출을 위해 새 광고 로드)
                             setIsAdLoaded(false);
+                            isAdLoadedRef.current = false;
                             preloadAd();
                             if (onDismissed) onDismissed();
                             break;
@@ -86,7 +100,7 @@ export const useTossRewardAd = (adGroupId: string) => {
             console.error('광고 표시 중 예상치 못한 에러:', error);
             onComplete();
         }
-    }, [adGroupId, isAdLoaded, preloadAd]);
+    }, [adGroupId, isSupported, preloadAd]);
 
-    return { showAd, isAdLoaded };
+    return { showAd, isAdLoaded, isSupported, hasError };
 };

@@ -31,8 +31,11 @@ export const SearchPage: React.FC = () => {
     const navigate = useNavigate();
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
-    const AD_GROUP_ID = 'ait.dev.43daa14da3ae487b'; // 테스트/기본 보상형 광고 ID
-    const { showAd } = useTossRewardAd(AD_GROUP_ID);
+    const AD_GROUP_ID = 'ait-ad-test-rewarded-id'; // 테스트/기본 보상형 광고 ID (구글 애드몹 기반 포함)
+    const { showAd, isAdLoaded, isSupported, hasError } = useTossRewardAd(AD_GROUP_ID);
+    
+    // 버튼을 비활성화할 지 판단 (지원되는 기기에서만 로딩 확인. 로딩 중이거나 에러가 생기지 않았을 때)
+    const isLoadingAd = isSupported && !isAdLoaded && !hasError;
 
     // 검색 로직 (선택된 지역이 있을 때 데이터 패치)
     useEffect(() => {
@@ -200,10 +203,11 @@ export const SearchPage: React.FC = () => {
 
                         <div className="space-y-3 pt-2">
                             <button
-                                className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.97] transition-all shadow-xl shadow-blue-100"
-                                onClick={handleShowAd}
+                                className={`w-full py-5 text-white rounded-[22px] font-bold text-lg transition-all shadow-xl shadow-blue-100 ${isLoadingAd ? 'bg-[#98C0FF] cursor-not-allowed' : 'bg-[#3182F6] active:scale-[0.97]'}`}
+                                onClick={isLoadingAd ? undefined : handleShowAd}
+                                disabled={isLoadingAd}
                             >
-                                상세 내역 전체보기
+                                {isLoadingAd ? '상세 내역 전체보기 (광고 로딩 중...)' : '상세 내역 전체보기'}
                             </button>
                             <button className="w-full py-2 text-[#8B95A1] font-bold text-[15px]" onClick={handleClose}>
                                 닫기

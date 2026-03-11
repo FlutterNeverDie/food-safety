@@ -1,5 +1,5 @@
 ---
-trigger: always_on
+trigger: manual
 ---
 
 # 앱인토스 광고 2.0 (보상형/전면형) 도입 로직 가이드 (AI 인수인계용)
