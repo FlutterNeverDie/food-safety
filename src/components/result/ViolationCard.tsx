@@ -65,10 +65,10 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                         <div className="w-10 h-10 bg-[#FFF0F0] rounded-[14px] flex items-center justify-center shrink-0 shadow-lg shadow-red-50 z-10 transition-transform group-hover/item:scale-110 border border-[#FFE0E0]">
                             <Gavel className="w-5 h-5 text-[#F04452]" />
                         </div>
-                        <div className="flex flex-col gap-1.5 pt-0.5 flex-1">
+                        <div className="flex flex-col gap-1.5 pt-0.5 flex-1 p-0.5">
                             <Text className="text-[12px] font-bold text-[#F04452] block uppercase tracking-tight">처분 결과</Text>
                             <div className="mt-1">
-                                <Text className="text-[19px] font-bold text-[#191F28] block leading-tight">
+                                <Text className="text-[19px] font-semibold text-[#F04452] block leading-tight">
                                     {row.DSPSCN}
                                 </Text>
                             </div>
