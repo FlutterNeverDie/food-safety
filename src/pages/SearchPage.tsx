@@ -165,7 +165,7 @@ export const SearchPage: React.FC = () => {
                             <div className="w-16 h-16 bg-[#FFF0F0] rounded-full flex items-center justify-center text-3xl text-[#F04452]">🚨</div>
                             <div className="space-y-2">
                                 <Text className="text-[22px] font-bold leading-tight text-[#191F28]">
-                                    {restaurant.name}의<br />위생 적발 이력이 있어요
+                                    <span className="font-semibold text-[26px] text-[#F04452]">{restaurant.name}</span>의<br />위생 적발 이력이 있어요
                                 </Text>
                                 <Text className="text-[15px] leading-relaxed text-[#8B95A1] font-medium">
                                     식품안전나라 데이터를 기반으로 확인된<br />행정처분 내역입니다.

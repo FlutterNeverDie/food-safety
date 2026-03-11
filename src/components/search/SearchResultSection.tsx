@@ -86,8 +86,10 @@ export const SearchResultSection: React.FC<Props> = ({
                         <div className="flex flex-col gap-1 flex-1 min-w-0">
                             {/* 가로 넘침(Overflow) 완벽 차단용 w-full min-w-0 */}
                             <div className="flex items-center justify-between gap-2 w-full min-w-0">
-                                {/* truncate가 확실히 동작하도록 flex-1 min-w-0 박스 설정 */}
-                                <div className="flex-1 min-w-0 text-[18px] sm:text-[19px] font-semibold text-[#3182F6] tracking-tight truncate flex items-center">{res.name}</div>
+                                {/* truncate가 확실히 동작하도록 flex-1 min-w-0 박스 설정, flex 제거 */}
+                                <div className="flex-1 min-w-0 text-[18px] sm:text-[19px] font-semibold text-[#3182F6] tracking-tight truncate">
+                                    {res.name}
+                                </div>
                                 <span className="shrink-0 text-[11px] font-bold text-[#3182F6] bg-[#E8F3FF] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-[#3182F6]/10">
                                     {res.category}
                                 </span>
