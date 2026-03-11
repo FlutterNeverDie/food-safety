@@ -13,7 +13,7 @@ export const ViolationSection: React.FC<Props> = ({ records }) => {
     return (
         <section className="space-y-2">
             <div className="flex flex-col gap-1 px-1">
-                <h1 className="!text-[19px] !font-semibold text-[#191F28] !tracking-[-0.04em] !leading-[1.4] break-keep font-['Pretendard_Variable']">
+                <h1 className="!text-[20px] !font-bold !text-[#191F28] !tracking-tight !leading-[1.4] break-keep font-['Pretendard_Variable']">
                     위반 적발 상세 내역
                 </h1>
             </div>

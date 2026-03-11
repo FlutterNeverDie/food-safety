@@ -11,7 +11,7 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
     return (
         <section className="space-y-2">
             <div className="flex flex-col gap-1 px-1">
-                <h1 className="!text-[19px] !font-semibold text-[#191F28] !tracking-[-0.04em] !leading-[1.4] break-keep font-['Pretendard_Variable']">
+                <h1 className="!text-[20px] !font-bold !text-[#191F28] !tracking-tight !leading-[1.4] break-keep font-['Pretendard_Variable']">
                     매장 상세 정보
                 </h1>
             </div>
@@ -23,8 +23,8 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
                         <Info className="w-5 h-5 text-[#8B95A1]" />
                     </div>
                     <div className="flex flex-col gap-1.5 pt-0.5">
-                        <Text className="text-[13px] font-bold text-[#B0B8C1] block tracking-tight">업종 분류</Text>
-                        <Text className="text-[17px] font-semibold text-[#4E5968] block">{restaurant.category}</Text>
+                        <Text className="!text-[14px] !font-semibold !text-[#8B95A1] block tracking-tight">업종 분류</Text>
+                        <Text className="!text-[18px] !font-semibold !text-[#333D4B] block mt-0.5">{restaurant.category}</Text>
                     </div>
                 </div>
 
@@ -34,8 +34,8 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
                         <MapPin className="w-5 h-5 text-[#8B95A1]" />
                     </div>
                     <div className="flex flex-col gap-1.5 pt-0.5 flex-1 p-0.5">
-                        <Text className="text-[13px] font-bold text-[#B0B8C1] block tracking-tight">소재지 주소</Text>
-                        <Text className="text-[17px] font-semibold text-[#333D4B] block leading-relaxed break-keep">
+                        <Text className="!text-[14px] !font-semibold !text-[#8B95A1] block tracking-tight">소재지 주소</Text>
+                        <Text className="!text-[18px] !font-medium !text-[#191F28] block !leading-[1.5] mt-0.5 break-keep">
                             {restaurant.address}
                         </Text>
                     </div>

@@ -22,7 +22,7 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                     <div className="flex items-center gap-2 text-[#8B95A1]">
                         <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F9FAFB] rounded-xl border border-[#F2F4F6]">
                             <Calendar className="w-4 h-4 text-[#B0B8C1]" />
-                            <Text className="text-[14px] font-bold">{formatDate(row.DSPS_DCSNDT)} 처분 확정</Text>
+                            <Text className="!text-[15px] !font-semibold !text-[#4E5968]">{formatDate(row.DSPS_DCSNDT)} 처분 확정</Text>
                         </div>
                     </div>
                 </div>
@@ -39,21 +39,21 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                                 <History className="w-5 h-5 text-[#8B95A1]" />
                             </div>
                             <div className="flex flex-col gap-1.5 pt-0.5">
-                                <Text className="text-[12px] font-bold text-[#B0B8C1] block uppercase tracking-tight">적발 시점</Text>
-                                <Text className="text-[17px] font-bold text-[#4E5968] block">{formatDate(violationDate)} 적발</Text>
+                                <Text className="!text-[14px] !font-semibold !text-[#8B95A1] block uppercase tracking-tight">적발 시점</Text>
+                                <Text className="!text-[18px] !font-semibold !text-[#333D4B] block mt-0.5">{formatDate(violationDate)} 적발</Text>
                             </div>
                         </div>
                     )}
 
-                    {/* 2. 위반 내용 */}
+                    {/* 2. 위반 항목 */}
                     <div className="relative flex items-start gap-5 group/item">
                         <div className="w-10 h-10 bg-white border-2 border-[#F9FAFB] rounded-[14px] flex items-center justify-center shrink-0 shadow-sm z-10 transition-transform group-hover/item:scale-110">
                             <FileText className="w-5 h-5 text-[#8B95A1]" />
                         </div>
                         <div className="flex flex-col gap-1.5 pt-0.5 flex-1 max-w-[calc(100%-60px)]">
-                            <Text className="text-[12px] font-bold text-[#B0B8C1] block uppercase tracking-tight">위반 항목</Text>
+                            <Text className="!text-[14px] !font-semibold !text-[#8B95A1] block uppercase tracking-tight">위반 항목</Text>
                             <div className="bg-[#F9FAFB]/50 p-4 rounded-2xl border border-[#F2F4F6] mt-1">
-                                <Text className="text-[16px] font-bold text-[#333D4B] block leading-relaxed break-keep">
+                                <Text className="!text-[17px] !font-medium !text-[#191F28] block !leading-[1.6] break-keep">
                                     {row.VILTCN.replace(/^\(\d{8}\)/, '').trim()}
                                 </Text>
                             </div>
@@ -66,9 +66,9 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                             <Gavel className="w-5 h-5 text-[#F04452]" />
                         </div>
                         <div className="flex flex-col gap-1.5 pt-0.5 flex-1 p-0.5">
-                            <Text className="text-[12px] font-bold text-[#F04452] block uppercase tracking-tight">처분 결과</Text>
+                            <Text className="!text-[14px] !font-bold !text-[#F04452] block uppercase tracking-tight">처분 결과</Text>
                             <div className="mt-1">
-                                <Text className="text-[19px] font-semibold text-[#F04452] block leading-tight">
+                                <Text className="!text-[21px] !font-bold !text-[#F04452] block leading-tight">
                                     {row.DSPSCN}
                                 </Text>
                             </div>
