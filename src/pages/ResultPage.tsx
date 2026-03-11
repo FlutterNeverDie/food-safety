@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchStore } from '../store/useSearchStore';
 import { ResultHeader } from '../components/result/ResultHeader';
@@ -8,6 +8,11 @@ import { RestaurantDetailInfo } from '../components/result/RestaurantDetailInfo'
 export const ResultPage: React.FC = () => {
     const { selectedRestaurant } = useSearchStore();
     const navigate = useNavigate();
+
+    // 페이지 이동 시 항상 최상단 스크롤 유지
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     if (!selectedRestaurant) return null;
 
