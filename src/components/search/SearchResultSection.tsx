@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from '@toss/tds-mobile';
 import { Map, X, ChevronRight } from 'lucide-react';
 import type { Restaurant } from '../../store/useSearchStore';
 
@@ -28,7 +27,7 @@ export const SearchResultSection: React.FC<Props> = ({
         return (
             <section className="space-y-6 animate-fade-in-up [animation-delay:150ms]">
                 <div className="flex justify-between items-center px-1">
-                    <Text className="text-[17px] font-semibold text-[#333D4B]">최근 검색한 지역</Text>
+                    <h2 className="text-[17px] font-semibold text-[#333D4B]">최근 검색한 지역</h2>
                     {recentSearches.length > 0 && (
                         <button onClick={onClearRecent} className="text-[14px] font-semibold text-[#3182F6]">모두 지우기</button>
                     )}
@@ -43,13 +42,14 @@ export const SearchResultSection: React.FC<Props> = ({
                                     className="flex items-center gap-1.5 px-5 py-3 bg-white border border-[#E5E8EB] rounded-full cursor-pointer active:scale-95 shadow-sm" 
                                     onClick={() => onSelectRecent(city, district)}
                                 >
-                                    <Text className="text-[15px] font-semibold text-[#4E5968]">{region}</Text>
+                                    <span className="text-[15px] font-semibold text-[#4E5968]">{region}</span>
                                     <button 
                                         onClick={(e) => { 
                                             e.stopPropagation(); 
                                             onRemoveRecent(region); 
                                         }} 
                                         className="text-[#B0B8C1]"
+                                        aria-label="삭제"
                                     >
                                         <X className="w-3 h-3" />
                                     </button>
@@ -59,7 +59,7 @@ export const SearchResultSection: React.FC<Props> = ({
                     ) : (
                         <div className="w-full py-16 flex flex-col items-center justify-center bg-white rounded-[32px] border border-[#F2F4F6]">
                             <Map className="w-10 h-10 text-[#E5E8EB] mb-4" />
-                            <p className="text-[#B0B8C1] font-semibold text-center text-[14px]">지역을 선택하시면<br />최근 검색한 내역에 저장돼요.</p>
+                            <p className="text-[#B0B8C1] font-semibold text-center text-[14px] leading-relaxed">지역을 선택하시면<br />최근 검색한 내역에 저장돼요.</p>
                         </div>
                     )}
                 </div>
@@ -70,32 +70,45 @@ export const SearchResultSection: React.FC<Props> = ({
     return (
         <section className="space-y-4 animate-fade-in-up">
             <div className="flex items-center justify-between px-1">
-                <Text className="text-[14px] font-semibold text-[#8B95A1]">{isSearching ? '조회 중...' : `검색 결과 ${filteredResults.length}개`}</Text>
+                <span className="text-[14px] font-semibold text-[#8B95A1]">{isSearching ? '조회 중...' : `검색 결과 ${filteredResults.length}개`}</span>
             </div>
             <div className="grid gap-3 pb-24">
                 {filteredResults.map((res) => (
-                    <div key={res.id} onClick={() => onRestaurantClick(res)} className="p-6 bg-white border border-[#F2F4F6] rounded-[28px] flex items-center justify-between active:scale-[0.98] cursor-pointer shadow-sm">
-                        <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 bg-[#FFF0F0] rounded-full flex items-center justify-center text-2xl">🚨</div>
-                            <div className="space-y-1.5">
-                                <div className="flex items-center gap-2">
-                                    <Text className="text-[17px] font-semibold text-[#191F28]">{res.name}</Text>
-                                    <span className="text-[10px] font-semibold text-[#3182F6] bg-blue-50 px-2 py-0.5 rounded-full">{res.category}</span>
+                    <div 
+                        key={res.id} 
+                        onClick={() => onRestaurantClick(res)} 
+                        className="p-6 bg-white border border-[#F2F4F6] rounded-[32px] flex items-center justify-between active:scale-[0.98] cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+                    >
+                        <div className="flex items-center gap-3 sm:gap-5 flex-1 min-w-0">
+                            {/* 아이콘: 작은 화면에서는 크기를 살짝 줄임 */}
+                            <div className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] bg-[#FFF0F0] rounded-full flex items-center justify-center text-2xl sm:text-3xl shrink-0 group-hover:scale-110 transition-transform">🚨</div>
+                            
+                            {/* 텍스트 정보 */}
+                            <div className="flex flex-col gap-1.5 flex-1 min-w-0 sm:pr-2">
+                                {/* 가로 넘침(Overflow) 완벽 차단 */}
+                                <div className="flex items-center justify-between gap-2.5 sm:gap-3 w-full min-w-0">
+                                    {/* truncate가 동작하려면 부모-자식 모두 min-w-0 이 필요함 */}
+                                    <div className="flex-1 min-w-0 text-[18px] sm:text-[20px] font-semibold text-[#3182F6] tracking-tight truncate">{res.name}</div>
+                                    <span className="shrink-0 text-[11px] font-bold text-[#3182F6] bg-[#E8F3FF] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg border border-[#3182F6]/10">
+                                        {res.category}
+                                    </span>
                                 </div>
-                                <div className="flex items-center gap-1 text-[#8B95A1]">
-                                    <Text className="text-[13px] font-medium line-clamp-1">{res.address}</Text>
-                                </div>
+                                <p className="mt-0.5 text-[14px] sm:text-[15px] font-medium text-[#8B95A1] leading-snug tracking-tight line-clamp-2 break-keep">
+                                    {res.address}
+                                </p>
                             </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-[#D1D6DB]" />
+
+                        {/* 우측 화살표 */}
+                        <ChevronRight className="w-5 h-5 text-[#D1D6DB] shrink-0 ml-1.5 sm:ml-2" />
                     </div>
                 ))}
                 {!isSearching && filteredResults.length === 0 && (
                     <div className="py-24 px-6 text-center animate-fade-in-up">
-                        <Text className="text-[14px] text-[#8B95A1] font-medium leading-relaxed">
+                        <p className="text-[14px] text-[#8B95A1] font-medium leading-relaxed">
                             검색하신 지역과 이름이 일치하는<br />
                             위생 적발 기록이 발견되지 않았습니다.
-                        </Text>
+                        </p>
                     </div>
                 )}
             </div>
