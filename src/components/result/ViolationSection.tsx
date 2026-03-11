@@ -11,11 +11,8 @@ interface Props {
 
 export const ViolationSection: React.FC<Props> = ({ records }) => {
     return (
-        <section className="space-y-5">
+        <section className="space-y-2">
             <div className="flex flex-col gap-1 px-1">
-                <Text className="!text-[12px] !font-bold text-[#F04452] !uppercase !tracking-[0.1em] !leading-none pb-0.5">
-                    행정처분 결과
-                </Text>
                 <h1 className="!text-[19px] !font-semibold text-[#191F28] !tracking-[-0.04em] !leading-[1.4] break-keep font-['Pretendard_Variable']">
                     위반 적발 상세 내역
                 </h1>

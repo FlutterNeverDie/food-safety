@@ -9,25 +9,22 @@ interface Props {
 
 export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
     return (
-        <section className="space-y-6 pb-4">
+        <section className="space-y-2">
             <div className="flex flex-col gap-1 px-1">
-                <Text className="!text-[12px] !font-bold text-[#8B95A1] !uppercase !tracking-[0.1em] !leading-none pb-0.5">
-                    Store Information
-                </Text>
                 <h1 className="!text-[19px] !font-semibold text-[#191F28] !tracking-[-0.04em] !leading-[1.4] break-keep font-['Pretendard_Variable']">
                     매장 상세 정보
                 </h1>
             </div>
 
-            <div className="bg-white border border-[#F2F4F6] rounded-[28px] p-7 space-y-7 shadow-sm">
+            <div className="bg-white border border-[#F2F4F6] rounded-[32px] p-8 space-y-9 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                 {/* 1. 업종 정보 */}
                 <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-[#F9FAFB] rounded-[14px] flex items-center justify-center shrink-0 border border-[#F2F4F6]">
                         <Info className="w-5 h-5 text-[#8B95A1]" />
                     </div>
-                    <div className="flex flex-col gap-1 pt-0.5">
-                        <Text className="text-[12px] font-bold text-[#B0B8C1] block uppercase tracking-tight">업종 분류</Text>
-                        <Text className="text-[16px] font-semibold text-[#4E5968] block">{restaurant.category}</Text>
+                    <div className="flex flex-col gap-1.5 pt-0.5">
+                        <Text className="text-[13px] font-bold text-[#B0B8C1] block tracking-tight">업종 분류</Text>
+                        <Text className="text-[17px] font-semibold text-[#4E5968] block">{restaurant.category}</Text>
                     </div>
                 </div>
 
@@ -36,9 +33,9 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
                     <div className="w-10 h-10 bg-[#F9FAFB] rounded-[14px] flex items-center justify-center shrink-0 border border-[#F2F4F6]">
                         <MapPin className="w-5 h-5 text-[#8B95A1]" />
                     </div>
-                    <div className="flex flex-col gap-1 pt-0.5 flex-1">
-                        <Text className="text-[12px] font-bold text-[#B0B8C1] block uppercase tracking-tight">소재지 주소</Text>
-                        <Text className="text-[16px] font-semibold text-[#333D4B] block leading-relaxed break-keep">
+                    <div className="flex flex-col gap-1.5 pt-0.5 flex-1 p-0.5">
+                        <Text className="text-[13px] font-bold text-[#B0B8C1] block tracking-tight">소재지 주소</Text>
+                        <Text className="text-[17px] font-semibold text-[#333D4B] block leading-relaxed break-keep">
                             {restaurant.address}
                         </Text>
                     </div>
