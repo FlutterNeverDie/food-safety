@@ -103,10 +103,10 @@ export const SearchResultSection: React.FC<Props> = ({
                             {/* 우측 화살표 (공간 최소화로 우측 잘림 방지) */}
                             <ChevronRight className="w-5 h-5 text-[#D1D6DB] shrink-0" />
                         </div>
-                        {/* 5번째 아이템마다 리스트 안에 카드형 광고 삽입 */}
-                        {(index + 1) % 5 === 0 && (
+                        {/* 3번째 아이템마다 리스트 안에 피드형 카드 광고 삽입 */}
+                        {(index + 1) % 3 === 0 && (
                             <div className="py-2">
-                                <TossBannerAd adGroupId="ait-ad-test-banner-id" variant="card" height="96px" />
+                                <TossBannerAd adGroupId="ait-ad-test-native-image-id" variant="card" />
                             </div>
                         )}
                     </Fragment>

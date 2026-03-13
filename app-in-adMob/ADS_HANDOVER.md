@@ -38,9 +38,10 @@
 - **테스트 ID**: `ait-ad-test-banner-id`
 
 ### C. 전면 광고 (Interstitial Ads)
-화면 전체를 덮는 광고로, 현재 프로젝트에서는 가이드로 정의되어 있습니다.
-
-- **권장 시점**: 페이지 전환 사이나 홈으로 돌아가는 시점.
+화면 전체를 덮는 광고로, 현재 프로젝트에서는- **작업 파일**: `src/hooks/useTossInterstitialAd.ts`
+- **구현 특징**: 
+  - 리액트 네이티브가 아닌 **순수 웹뷰(WebView)** 환경에서 에러가 발생하지 않도록 `isSupported` 체크가 포함되어 있습니다.
+  - 전면 광고는 보상이 없으므로 `onClose` 콜백을 통해 다음 로직을 즉시 실행합니다.
 - **테스트 ID**: `ait-ad-test-interstitial-id`
 
 ---

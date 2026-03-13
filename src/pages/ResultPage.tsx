@@ -5,6 +5,7 @@ import { useTossInterstitialAd } from '../hooks/useTossInterstitialAd';
 import { ResultHeader } from '../components/result/ResultHeader';
 import { ViolationSection } from '../components/result/ViolationSection';
 import { RestaurantDetailInfo } from '../components/result/RestaurantDetailInfo';
+import { TossBannerAd } from '../components/common/TossBannerAd';
 
 export const ResultPage: React.FC = () => {
     const { selectedRestaurant } = useSearchStore();
@@ -25,10 +26,13 @@ export const ResultPage: React.FC = () => {
                 <ResultHeader />
 
                 <main className="flex-1 px-6 pt-8 pb-32 space-y-12 animate-fade-in-up">
-                    {/* 1. 위생 적발 내역 (ViolationSection.tsx에서 수정) */}
+                    {/* 1. 위생 적발 내역 */}
                     <ViolationSection records={selectedRestaurant.raw} />
 
-                    {/* 2. 매장 상세 정보 (RestaurantDetailInfo.tsx에서 수정) */}
+                    {/* 매장 상세 정보 위의 배너 광고 (추가) */}
+                    <TossBannerAd adGroupId="ait-ad-test-banner-id" variant="card" />
+
+                    {/* 2. 매장 상세 정보 */}
                     <RestaurantDetailInfo restaurant={selectedRestaurant} />
                 </main>
 

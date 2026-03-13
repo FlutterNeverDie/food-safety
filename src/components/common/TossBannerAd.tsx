@@ -25,7 +25,12 @@ export const TossBannerAd: React.FC<TossBannerAdProps> = ({
 
         const attached = attachBanner(adGroupId, bannerRef.current, {
             variant,
+            theme: 'auto', // 시스템 설정에 따라 다크/라이트 자동 전환
+            tone: 'blackAndWhite', // 가이드 권장 기본값
             callbacks: {
+                onAdRendered: () => {
+                    console.log(`Banner Ad (${adGroupId}) rendered successfully`);
+                },
                 onAdFailedToRender: (payload: any) => {
                     console.error('Banner failed to render:', payload.error.message);
                 }
@@ -33,7 +38,9 @@ export const TossBannerAd: React.FC<TossBannerAdProps> = ({
         });
 
         return () => {
-            attached?.destroy();
+            if (attached && typeof attached.destroy === 'function') {
+                attached.destroy();
+            }
         };
     }, [isInitialized, adGroupId, attachBanner, variant]);
 
