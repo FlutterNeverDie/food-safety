@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTossRewardAd } from '../hooks/useTossRewardAd';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@toss/tds-mobile';
@@ -14,6 +14,11 @@ import { TossBannerAd } from '../components/common/TossBannerAd';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export const SearchPage: React.FC = () => {
+    // 페이지 진입 시 스크롤 최상단
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const {
         keyword,
         setKeyword,

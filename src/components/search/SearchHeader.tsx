@@ -4,7 +4,7 @@ import { AlertCircle } from 'lucide-react';
 
 export const SearchHeader: React.FC = () => {
     return (
-        <div className="px-7 pt-20 pb-12 flex flex-col items-start text-left space-y-6 animate-fade-in-up">
+        <div className="px-7 pt-10 pb-4 flex flex-col items-start text-left space-y-6 animate-fade-in-up">
             {/* 이미지 기반 리뉴얼 배지 */}
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white rounded-[20px] border border-[#F2F4F6] shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
                 <div className="w-6 h-6 bg-[#F04452] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(240,68,82,0.2)]">

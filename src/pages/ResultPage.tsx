@@ -30,8 +30,8 @@ export const ResultPage: React.FC = () => {
                     {/* 1. 위생 적발 내역 */}
                     <ViolationSection records={selectedRestaurant.raw} />
 
-                    {/* 매장 상세 정보 위의 배너 광고 (추가) */}
-                    <TossBannerAd adGroupId="ait-ad-test-banner-id" variant="card" />
+                    {/* 매장 상세 정보 위의 배너 광고 (피드형 ID 적용) */}
+                    <TossBannerAd adGroupId="ait-ad-test-native-image-id" variant="card" />
 
                     {/* 2. 매장 상세 정보 */}
                     <RestaurantDetailInfo restaurant={selectedRestaurant} />
@@ -40,7 +40,10 @@ export const ResultPage: React.FC = () => {
                 <footer className="p-6 bg-white/80 backdrop-blur-md border-t border-[#F2F4F6] fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-20">
                     <button
                         className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.98] transition-all shadow-xl shadow-blue-100"
-                        onClick={() => navigate('/search')}
+                        onClick={() => {
+                            window.scrollTo(0, 0);
+                            navigate('/search');
+                        }}
                     >
                         닫기
                     </button>
