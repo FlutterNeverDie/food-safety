@@ -18,6 +18,13 @@ export const ResultPage: React.FC = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    // 데이터 유실 시(새로고침 등) 검색 페이지로 튕겨내기 (흰 화면 방지)
+    useEffect(() => {
+        if (!selectedRestaurant) {
+            navigate('/search', { replace: true });
+        }
+    }, [selectedRestaurant, navigate]);
+
     if (!selectedRestaurant) return null;
 
     return (
@@ -39,7 +46,7 @@ export const ResultPage: React.FC = () => {
                 <footer className="p-6 bg-white/80 backdrop-blur-md border-t border-[#F2F4F6] fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-20">
                     <button
                         className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.98] transition-all shadow-xl shadow-blue-100"
-                        onClick={() => showAd(() => navigate('/'))}
+                        onClick={() => showAd(() => navigate('/search'))}
                     >
                         닫기
                     </button>

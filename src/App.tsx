@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { OverlayProvider } from '@toss/use-overlay';
 import { TDSMobileProvider } from '@toss/tds-mobile';
+import { IntroPage } from './pages/IntroPage';
 import { SearchPage } from './pages/SearchPage';
 import { ResultPage } from './pages/ResultPage';
 
@@ -21,7 +22,8 @@ const App: React.FC = () => {
       <OverlayProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SearchPage />} />
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/result" element={<ResultPage />} />
           </Routes>
         </BrowserRouter>
