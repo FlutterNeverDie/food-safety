@@ -64,5 +64,126 @@
 4. [ ] **리워드 지급 시점**: `userEarnedReward` 이벤트를 정확히 감지하여 보상을 주는가?
 
 ---
+## 6. 트러블슈팅 및 주의사항 (Troubleshooting)
+
+개발 및 리팩토링 시 가장 실수하기 쉬운 항목들을 정리했습니다.
+
+### ⚠️ 함수명 혼동 주의 (CRITICAL)
+- **사용 금지**: `loadFullScreenAd`, `showFullScreenAd` (일부 환경에서 브릿지 미작동 가능성)
+- **사용 필수**: **`GoogleAdMob.loadAppsInTossAdMob`**, **`GoogleAdMob.showAppsInTossAdMob`**
+  - 반드시 `GoogleAdMob` 네임스페이스를 통해 호출해야 토스 앱 내 광고 브릿지가 정상적으로 연결됩니다.
+
+### ⚠️ 광고 로드-노출 순서 (Preload Rule)
+- 광고는 반드시 **미리 로드(Load)된 상태**에서만 보여줄(Show) 수 있습니다.
+- `loaded` 이벤트를 받은 후 `show`를 호출하는 로직이 보장되어야 합니다. 로드되지 않은 상태에서 호출 시 아무 동작도 하지 않거나 에러가 발생할 수 있습니다 (Fallback 로직 필수).
+
+### ⚠️ 환경 지원 체크 (Safe Call)
+- 모든 API 호출 전에는 반드시 `.isSupported()`를 확인하여 앱 외부(일반 브라우저/로컬)에서의 크래시를 방지하세요.
+  ```typescript
+  if (GoogleAdMob.loadAppsInTossAdMob.isSupported()) { ... }
+  ```
+
+### ⚠️ 배너 광고 "흰 화면" 문제
+- 배너 광고 컨테이너에 **최소 높이(min-height)**가 지정되지 않으면 광고가 로드되어도 화면에 보이지 않아 "흰 화면"으로 보일 수 있습니다. (리스트 배너: 96px, 피드 배너: 410px 권장)
+
+### ⚠️ 광고 ID 관리
+- 광고 ID는 반드시 `src/constants/adConfig.ts`에서 중앙 관리하세요. 
+- 테스트 중에는 `ait-ad-test-`로 시작하는 ID를 사용하고, 출시 직전에 실제 ID로 교체하는 것을 잊지 마세요.
+
+---
 **최종 업데이트**: 2026-03-13  
 **문서 출처**: [AppsInToss 공식 가이드](https://developers-apps-in-toss.toss.im/ads/develop.md)
+
+
+
+
+# 📢 AppsInToss Ad Integration Guide (AdMob 2.0)
+
+이 문서는  프로젝트의 토스 인앱 광고 통합 방식과 핵심 코드를 설명합니다. 다른 에이전트나 개발자가 광고 기능을 확장하거나 유지보수할 때 이 가이드를 따르세요.
+
+---
+
+## 1. 광고 종류 및 테스트 ID
+
+토스 인앱 광고 2.0 (AdMob 기반)은 아래 4가지 테스트 ID를 사용하여 환경에 맞는 배너/전면 광고를 노출합니다.
+
+| 광고 유형 | 테스트 ID (adGroupId) | 적용 위치 |
+| :--- | :--- | :--- |
+| **전면형 (Interstitial)** | `ait-ad-test-interstitial-id` | (현재 제거됨 - 필요 시 복구 가능) |
+| **리워드형 (Rewarded)** | `ait-ad-test-rewarded-id` | 검색 리스트 -> 상세 진입 시 '상세보기' 버튼 |
+| **배너 (문구 강조형)** | `ait-ad-test-banner-id` | 검색 메인 하단 고정 (띠 배너) |
+| **배너 (이미지 강조형)** | `ait-ad-test-native-image-id` | 검색 리스트 사이, 상세 페이지 중단 카드 |
+
+---
+
+## 2. 핵심 배너 컴포넌트 (`TossBannerAd.tsx`)
+
+배너 광고의 핵심은 **환경 감지**와 **명시적 초기화**입니다. 아래 패턴을 반드시 유지해야 흰 화면 이슈를 방지할 수 있습니다.
+
+### 핵심 구현 포인트
+1.  **Environment Check**: `isTossApp`과 `isLocal`을 확인하여 토스 앱 WebView에서만 로직이 실행되도록 방어합니다.
+2.  **Explicit Init**: 배너를 부착(`attach`)하기 전, `TossAds.initialize`를 호출하여 브릿지를 활성화합니다.
+3.  **Mock UI**: 로컬/웹 환경에서는 광고 영역에 점선 박스와 ID를 표시하여 개발 편의성을 제공합니다.
+4.  **Min-Height**: `minHeight`를 강제 지정하여 인스턴스 로딩 전 레이아웃 붕괴를 막습니다.
+
+```tsx
+// src/components/common/TossBannerAd.tsx
+useEffect(() => {
+    const isTossApp = /Toss/i.test(navigator.userAgent);
+    if (!isTossApp && isLocal) return; // 웹 환경 방어
+
+    // 1. 초기화 (initialize)
+    const globalAds = (TossAds as any);
+    globalAds.initialize?.({ /* callbacks... */ });
+
+    // 2. 부착 (attach)
+    const attachFn = globalAds.attachBanner || globalAds.attach;
+    attachFn?.(adGroupId, bannerRef.current, {
+        variant, // 'card' 또는 'expanded'
+        theme: 'light',
+        tone: 'blackAndWhite'
+    });
+
+    return () => { globalAds.destroyAll?.(); }; // 정리 로직 필수
+}, [adGroupId, variant]);
+```
+
+---
+
+## 3. 리워드 광고 워크플로우 (`useTossRewardAd.ts`)
+
+리워드 광고는 배너와 달리 **미리 로드(Preload)**한 뒤, 유저 액션 시점에 **노출(Show)**하는 2단계 프로세스로 작동합니다.
+
+1.  **로드 (`loadAppsInTossAdMob`)**: 상세 정보 팝업이 뜰 때 혹은 페이지 로드 시점에 미리 로드합니다.
+2.  **노출 (`showAppsInTossAdMob`)**: 유저가 버튼을 클릭하면 저장된 광고를 보여주고, 완료 후 콜백을 실행합니다.
+
+```tsx
+// 예시: 리워드 광고 실행 시점
+const handleShowAd = () => {
+    showAd(() => {
+        // 광고 시청 완료 후 실행될 비즈니스 로직
+        navigate('/result');
+    });
+};
+```
+
+---
+
+## 4. UI/UX 원칙
+
+*   **배너 위치 가이드**:
+    *   `variant="expanded"`: 화면 하단에 끈 형태(띠 배너)로 고정할 때 사용합니다.
+    *   `variant="card"`: 리스트 내부에 삽입하거나 컨텐츠 사이에 자연스럽게 배치할 때 사용합니다. (최소 높이 180px 권장)
+*   **광고 피로도 조절**: 현재 상세 페이지에서 퇴거 시(닫기 버튼)에는 광고를 제거하여 유저 이탈을 방지하고 있습니다.
+
+---
+
+## 5. 실기기 테스트 및 배포
+
+1.  **로컬 테스트**: `npm run dev` 실행 시 광고 영역이 회색 점선 박스로 표시되면 정상입니다.
+2.  **배포**: `npm run deploy` 명령어를 통해 토스 서버로 빌드 결과물을 전송하십시오.
+3.  **실기기 확인**: 실제 토스 앱 WebView에서는 테스트 ID에 해당하는 광고가 실제 렌더링됩니다.
+
+> [!IMPORTANT]
+> 실제 상용 배포 전에는 반드시 `granite.config.ts` 및 관련 코드의 `adGroupId`를 토스 디벨로퍼 센터에서 발급받은 **상용 ID**로 교체해야 합니다.
+
