@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useTossBanner } from '../../hooks/useTossBanner';
+import { TossAds } from '@apps-in-toss/web-framework';
 
 interface TossBannerAdProps {
     adGroupId: string;
@@ -9,7 +9,7 @@ interface TossBannerAdProps {
 }
 
 /**
- * AppsInToss 배너 광고 컴포넌트
+ * AppsInToss 배너 광고 컴포넌트 (리뉴얼 버전)
  */
 export const TossBannerAd: React.FC<TossBannerAdProps> = ({ 
     adGroupId, 
@@ -18,40 +18,89 @@ export const TossBannerAd: React.FC<TossBannerAdProps> = ({
     height
 }) => {
     const bannerRef = useRef<HTMLDivElement>(null);
-    const { isInitialized, attachBanner } = useTossBanner();
 
     useEffect(() => {
-        if (!isInitialized || !bannerRef.current) return;
+        const isTossApp = /Toss/i.test(navigator.userAgent);
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname.startsWith('172.');
+        
+        // 1. 토스 앱이 아닌 웹 브라우저/로컬 환경이면 광고 로직 수행 안함 (흰 화면 방지용 조기 리턴)
+        if (!isTossApp && isLocal) return;
 
-        const attached = attachBanner(adGroupId, bannerRef.current, {
-            variant,
-            theme: 'auto', // 시스템 설정에 따라 다크/라이트 자동 전환
-            tone: 'blackAndWhite', // 가이드 권장 기본값
-            callbacks: {
-                onAdRendered: () => {
-                    console.log(`Banner Ad (${adGroupId}) rendered successfully`);
-                },
-                onAdFailedToRender: (payload: any) => {
-                    console.error('Banner failed to render:', payload.error.message);
-                }
+        if (!bannerRef.current) return;
+
+        try {
+
+            // 2. 반드시 초기화(initialize)가 선행되어야 합니다.
+            // (Note: 웹 프레임워크 버전에 따라 TossAds.initialize.isSupported() 호출 형태가 다를 수 있음)
+            const globalAds = (TossAds as any);
+            if (globalAds.initialize) {
+                globalAds.initialize({
+                    callbacks: {
+                        onInitialized: () => console.log(`[TossAds] Initialized for ${adGroupId}`),
+                        onInitializationFailed: (err: any) => console.error('[TossAds] Init Failed', err)
+                    }
+                });
             }
-        });
+
+            // 3. 배너 부착 (Attach)
+            // Tip: 가이드 코드의 TossAds.attach는 버전별로 attachBanner일 수 있습니다.
+            const attachFn = globalAds.attachBanner || globalAds.attach;
+            if (attachFn) {
+                attachFn(adGroupId, bannerRef.current, {
+                    variant,
+                    theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+                    tone: 'blackAndWhite',
+                    callbacks: {
+                        onAdRendered: () => console.log(`[TossAds] Banner Rendered: ${adGroupId}`),
+                        onAdFailedToRender: (payload: any) => {
+                            console.error(`[TossAds] Render Failed: ${adGroupId}`, payload.error);
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.warn('[TossAds] Unexpected error:', error);
+        }
 
         return () => {
-            if (attached && typeof attached.destroy === 'function') {
-                attached.destroy();
+            // 언마운트 시 정리 (destroyAll)
+            const globalAds = (TossAds as any);
+            if (typeof globalAds?.destroyAll === 'function') {
+                try { globalAds.destroyAll(); } catch (e) {}
             }
         };
-    }, [isInitialized, adGroupId, attachBanner, variant]);
+    }, [adGroupId, variant]);
+
+    // 환경 체크 (Mock UI 노출 여부 결정)
+    const isTossApp = /Toss/i.test(navigator.userAgent);
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname.startsWith('172.');
+    const showMock = !isTossApp && isLocal;
+
+    // 배너 사이즈 계산
+    const containerHeight = height || (variant === 'card' ? '180px' : '96px');
 
     return (
         <div
             ref={bannerRef}
-            className={`w-full overflow-hidden flex items-center justify-center bg-white ${variant === 'card' ? 'rounded-[20px] border border-[#F2F4F6]' : ''} ${className}`}
+            className={`w-full flex items-center justify-center transition-all duration-300 ${className}`}
             style={{
-                height: height || (variant === 'card' ? 'auto' : '96px'),
-                minHeight: height || (variant === 'card' ? '180px' : '96px')
+                width: '100%',
+                minHeight: containerHeight,
+                background: showMock ? '#F2F4F6' : 'transparent',
+                borderRadius: variant === 'card' ? '24px' : '0px',
+                border: showMock ? '1px dashed #B0B8C1' : 'none',
+                color: '#6B7684',
+                margin: variant === 'card' ? '12px 0' : '0',
+                overflow: 'hidden'
             }}
-        />
+        >
+            {/* 로컬 개발 환경에서만 보이는 Mock UI */}
+            {showMock && (
+                <div className="flex flex-col items-center gap-1 opacity-60">
+                    <span className="text-[14px] font-bold">📢 Toss Ad Banner</span>
+                    <span className="text-[11px] font-medium opacity-70">({adGroupId} / {variant})</span>
+                </div>
+            )}
+        </div>
     );
 };

@@ -114,8 +114,6 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
       // 롤백: 1000개로 다시 조정 및 https 유지
       const fetchUrl = `https://openapi.foodsafetykorea.go.kr/api/${API_KEY}/I2630/json/1/1000`;
       
-      // [Debug] 앱 내 API 호출 확인
-      alert(`API 호출 시작: ${selectedCity} ${selectedDistrict}`);
 
       const response = await fetch(fetchUrl);
       
@@ -159,14 +157,11 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
           };
         });
 
-        alert(`조회 성공: ${results.length}건 검색됨`);
         set({ searchResults: results });
       } else {
-        alert('결과 데이터가 없습니다 (I2630.row 없음)');
         set({ searchResults: [] });
       }
     } catch (error: any) {
-      alert(`조회 오류 발생: ${error.message}\n${error.stack || ''}`);
       console.error('API Fetch Error:', error);
       set({ searchResults: [] });
     } finally {
