@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Map, X, ChevronRight } from 'lucide-react';
 import type { Restaurant } from '../../store/useSearchStore';
 import { TossBannerAd } from '../common/TossBannerAd';
+import { AD_CONFIG } from '../../constants/adConfig';
 
 interface Props {
     selectedDistrict: string;
@@ -106,7 +107,7 @@ export const SearchResultSection: React.FC<Props> = ({
                         {/* 3번째 아이템마다 리스트 안에 피드형 카드 광고 삽입 */}
                         {(index + 1) % 3 === 0 && (
                             <div className="py-2">
-                                <TossBannerAd adGroupId="ait-ad-test-native-image-id" variant="card" />
+                                <TossBannerAd adGroupId={AD_CONFIG.BANNER_FEED_ID} variant="card" />
                             </div>
                         )}
                     </Fragment>

@@ -11,6 +11,7 @@ import { RegionSection } from '../components/search/RegionSection';
 import { SearchBar } from '../components/search/SearchBar';
 import { SearchResultSection } from '../components/search/SearchResultSection';
 import { TossBannerAd } from '../components/common/TossBannerAd';
+import { AD_CONFIG } from '../constants/adConfig';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export const SearchPage: React.FC = () => {
@@ -38,8 +39,7 @@ export const SearchPage: React.FC = () => {
     const navigate = useNavigate();
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
-    const AD_GROUP_ID = 'ait-ad-test-rewarded-id';
-    const { showAd, isAdLoaded, isSupported, hasError } = useTossRewardAd(AD_GROUP_ID);
+    const { showAd, isAdLoaded, isSupported, hasError } = useTossRewardAd(AD_CONFIG.REWARD_ID);
     
     // 버튼을 비활성화할 지 판단
     const isLoadingAd = isSupported && !isAdLoaded && !hasError;
@@ -266,7 +266,7 @@ export const SearchPage: React.FC = () => {
 
             {/* 메인 하단 고정 배너 광고 */}
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#F2F4F6] w-full max-w-lg mx-auto overflow-hidden">
-                <TossBannerAd adGroupId="ait-ad-test-banner-id" height="96px" />
+                <TossBannerAd adGroupId={AD_CONFIG.BANNER_LIST_ID} height="96px" />
             </div>
         </div>
     );

@@ -4,6 +4,7 @@ import { useSearchStore } from '../store/useSearchStore';
 import { ViolationSection } from '../components/result/ViolationSection';
 import { RestaurantDetailInfo } from '../components/result/RestaurantDetailInfo';
 import { TossBannerAd } from '../components/common/TossBannerAd';
+import { AD_CONFIG } from '../constants/adConfig';
 
 export const ResultPage: React.FC = () => {
     const { selectedRestaurant } = useSearchStore();
@@ -31,7 +32,7 @@ export const ResultPage: React.FC = () => {
                     <ViolationSection records={selectedRestaurant.raw} />
 
                     {/* 매장 상세 정보 위의 배너 광고 (피드형 ID 적용) */}
-                    <TossBannerAd adGroupId="ait-ad-test-native-image-id" variant="card" />
+                    <TossBannerAd adGroupId={AD_CONFIG.BANNER_FEED_ID} variant="card" />
 
                     {/* 2. 매장 상세 정보 */}
                     <RestaurantDetailInfo restaurant={selectedRestaurant} />
