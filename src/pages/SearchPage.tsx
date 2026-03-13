@@ -10,6 +10,7 @@ import { SearchHeader } from '../components/search/SearchHeader';
 import { RegionSection } from '../components/search/RegionSection';
 import { SearchBar } from '../components/search/SearchBar';
 import { SearchResultSection } from '../components/search/SearchResultSection';
+import { TossBannerAd } from '../components/common/TossBannerAd';
 
 export const SearchPage: React.FC = () => {
     const {
@@ -223,7 +224,7 @@ export const SearchPage: React.FC = () => {
         <div className="app-container !bg-[#F9FAFB]">
             <SearchHeader />
 
-            <main className="flex-1 px-6 space-y-8">
+            <main className="flex-1 px-6 space-y-8 pb-32">
                 {/* 1. 위치 지역 선택 */}
                 <RegionSection 
                     selectedCity={selectedCity} 
@@ -255,6 +256,11 @@ export const SearchPage: React.FC = () => {
                     onRestaurantClick={handleRestaurantClick}
                 />
             </main>
+
+            {/* 메인 하단 고정 배너 광고 */}
+            <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#F2F4F6] w-full max-w-lg mx-auto overflow-hidden">
+                <TossBannerAd adGroupId="ait-ad-test-banner-id" height="96px" />
+            </div>
         </div>
     );
 };

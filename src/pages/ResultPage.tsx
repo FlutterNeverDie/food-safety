@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchStore } from '../store/useSearchStore';
+import { useTossInterstitialAd } from '../hooks/useTossInterstitialAd';
 import { ResultHeader } from '../components/result/ResultHeader';
 import { ViolationSection } from '../components/result/ViolationSection';
 import { RestaurantDetailInfo } from '../components/result/RestaurantDetailInfo';
@@ -8,6 +9,8 @@ import { RestaurantDetailInfo } from '../components/result/RestaurantDetailInfo'
 export const ResultPage: React.FC = () => {
     const { selectedRestaurant } = useSearchStore();
     const navigate = useNavigate();
+    const INTERSTITIAL_ID = 'ait-ad-test-interstitial-id';
+    const { showAd } = useTossInterstitialAd(INTERSTITIAL_ID);
 
     // 페이지 이동 시 항상 최상단 스크롤 유지
     useEffect(() => {
@@ -32,7 +35,7 @@ export const ResultPage: React.FC = () => {
                 <footer className="p-6 bg-white/80 backdrop-blur-md border-t border-[#F2F4F6] fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-20">
                     <button
                         className="w-full py-5 bg-[#3182F6] text-white rounded-[22px] font-bold text-lg active:scale-[0.98] transition-all shadow-xl shadow-blue-100"
-                        onClick={() => navigate('/')}
+                        onClick={() => showAd(() => navigate('/'))}
                     >
                         닫기
                     </button>
