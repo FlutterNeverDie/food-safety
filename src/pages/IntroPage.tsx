@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Bell } from 'lucide-react';
-import logoImg from '../assets/logo.png';
 
 export const IntroPage: React.FC = () => {
     const navigate = useNavigate();
@@ -10,6 +9,8 @@ export const IntroPage: React.FC = () => {
     const handleStart = () => {
         navigate('/search');
     };
+
+    const APP_ICON_URL = 'https://static.toss.im/appsintoss/16823/76818715-d10a-47ac-9b72-d7b499147400.png';
 
     return (
         <div className="app-container bg-white flex flex-col justify-between overflow-hidden">
@@ -54,7 +55,7 @@ export const IntroPage: React.FC = () => {
                         className="absolute inset-0 flex items-center justify-center"
                     >
                         <div className="w-32 h-32 bg-white rounded-[40px] shadow-2xl shadow-blue-200 flex items-center justify-center overflow-hidden p-4">
-                            <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+                            <img src={APP_ICON_URL} alt="Logo" className="w-full h-full object-contain" />
                         </div>
                     </motion.div>
 

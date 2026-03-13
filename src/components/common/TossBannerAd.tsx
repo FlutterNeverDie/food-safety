@@ -15,7 +15,7 @@ export const TossBannerAd: React.FC<TossBannerAdProps> = ({
     adGroupId, 
     variant = 'expanded',
     className = "",
-    height = "96px"
+    height
 }) => {
     const bannerRef = useRef<HTMLDivElement>(null);
     const { isInitialized, attachBanner } = useTossBanner();
@@ -45,10 +45,13 @@ export const TossBannerAd: React.FC<TossBannerAdProps> = ({
     }, [isInitialized, adGroupId, attachBanner, variant]);
 
     return (
-        <div 
-            ref={bannerRef} 
-            className={`w-full overflow-hidden ${className}`} 
-            style={{ minHeight: height }} 
+        <div
+            ref={bannerRef}
+            className={`w-full overflow-hidden flex items-center justify-center bg-white ${variant === 'card' ? 'rounded-[20px] border border-[#F2F4F6]' : ''} ${className}`}
+            style={{
+                height: height || (variant === 'card' ? 'auto' : '96px'),
+                minHeight: height || (variant === 'card' ? '180px' : '96px')
+            }}
         />
     );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useTossRewardAd } from '../hooks/useTossRewardAd';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@toss/tds-mobile';
@@ -11,6 +11,7 @@ import { RegionSection } from '../components/search/RegionSection';
 import { SearchBar } from '../components/search/SearchBar';
 import { SearchResultSection } from '../components/search/SearchResultSection';
 import { TossBannerAd } from '../components/common/TossBannerAd';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 export const SearchPage: React.FC = () => {
     const {
@@ -32,18 +33,14 @@ export const SearchPage: React.FC = () => {
     const navigate = useNavigate();
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
-    const AD_GROUP_ID = 'ait-ad-test-rewarded-id'; // 테스트/기본 보상형 광고 ID (구글 애드몹 기반 포함)
+    const AD_GROUP_ID = 'ait-ad-test-rewarded-id';
     const { showAd, isAdLoaded, isSupported, hasError } = useTossRewardAd(AD_GROUP_ID);
     
-    // 버튼을 비활성화할 지 판단 (지원되는 기기에서만 로딩 확인. 로딩 중이거나 에러가 생기지 않았을 때)
+    // 버튼을 비활성화할 지 판단
     const isLoadingAd = isSupported && !isAdLoaded && !hasError;
 
-    // 검색 로직 (선택된 지역이 있을 때 데이터 패치)
-    useEffect(() => {
-        if (selectedCity && selectedDistrict) {
-            searchRestaurants();
-        }
-    }, [searchRestaurants, selectedCity, selectedDistrict]);
+    // [변경] useEffect 자동 검색 로직 삭제 (handleDistrictClick에서 직접 제어하여 중복/무한 호출 방지)
+    // 이전: useEffect(() => { ... }, [...]);
 
     // 입력한 키워드 필터링
     const filteredResults = searchResults.filter(res =>
@@ -55,6 +52,9 @@ export const SearchPage: React.FC = () => {
         overlay.open(({ isOpen, close, exit }) => {
             const [step, setStep] = React.useState<'city' | 'district'>(selectedCity ? 'district' : 'city');
             const [tempCity, setTempCity] = React.useState<string>(selectedCity || '');
+            
+            // 다이얼로그 열려있을 때 배경 스크롤 차단
+            useBodyScrollLock(isOpen);
 
             const handleClose = () => {
                 close();
@@ -70,58 +70,60 @@ export const SearchPage: React.FC = () => {
                 setSelectedCity(tempCity);
                 setSelectedDistrict(name);
                 addRecentSearch(`${tempCity} ${name}`);
+                // 명시적으로 검색 호출
+                searchRestaurants();
                 handleClose();
             };
 
             return (
                 <div
-                    className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    className={`fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     onClick={handleClose}
                 >
                     <div
-                        className={`w-full max-w-md bg-white rounded-[32px] p-6 pb-8 space-y-6 flex flex-col transform transition-all duration-300 shadow-2xl h-[55vh] min-h-[420px] max-h-[600px] ${isOpen ? 'scale-100' : 'scale-95'}`}
+                        className={`w-full max-w-lg bg-white rounded-t-[32px] sm:rounded-[32px] p-6 pb-12 sm:pb-8 space-y-6 flex flex-col transform transition-all duration-500 shadow-2xl h-[75vh] sm:h-[65vh] min-h-[500px] ${isOpen ? 'translate-y-0 sm:scale-100' : 'translate-y-full sm:scale-95'}`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between px-2">
+                        <div className="flex items-center justify-between px-2 pt-2">
                             <div className="flex flex-col">
-                                <Text className="text-[20px] font-bold text-[#191F28]">
+                                <Text className="text-[24px] font-bold text-[#191F28] tracking-tight">
                                     {step === 'city' ? '어느 지역인가요?' : tempCity}
                                 </Text>
-                                <Text className="text-[13px] font-medium text-[#8B95A1] mt-0.5">
-                                    {step === 'city' ? '시/도를 선택해주세요' : '시/군/구를 선택해주세요'}
+                                <Text className="text-[14px] font-medium text-[#8B95A1] mt-1">
+                                    {step === 'city' ? '주소를 찾기 위해 시/도를 선택해주세요' : '상세 시/군/구를 선택해주세요'}
                                 </Text>
                             </div>
-                            <button onClick={handleClose} className="p-2 bg-[#F2F4F6] rounded-full text-[#8B95A1]">
-                                <X className="w-5 h-5" />
+                            <button onClick={handleClose} className="p-2.5 bg-[#F2F4F6] rounded-full text-[#8B95A1] active:scale-90 transition-all">
+                                <X className="w-6 h-6" />
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+                        <div className="flex-1 overflow-hidden flex flex-col min-h-0 pt-2">
                             {step === 'city' ? (
-                                <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 custom-scrollbar">
+                                <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 pb-10 custom-scrollbar">
                                     {Object.entries(PROVINCE_DISPLAY_NAMES).map(([key, name]) => (
                                         <button
                                             key={key}
                                             onClick={() => handleCityClick(name)}
-                                            className="py-5 bg-[#F2F4F6] rounded-[24px] text-[15px] font-bold text-[#4E5968] active:scale-95 transition-all"
+                                            className="py-6 bg-[#F9FAFB] border border-[#F2F4F6] rounded-[24px] text-[16px] font-bold text-[#4E5968] active:bg-[#E8F3FF] active:text-[#3182F6] active:border-[#3182F6]/20 transition-all"
                                         >
                                             {name}
                                         </button>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col h-full overflow-hidden space-y-4">
-                                    <button onClick={() => setStep('city')} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E8F3FF] rounded-full text-[13px] font-bold text-[#3182F6] self-start">
-                                        <ChevronRight className="w-4 h-4 rotate-180" /> 처음부터 다시
+                                <div className="flex flex-col h-full overflow-hidden space-y-5">
+                                    <button onClick={() => setStep('city')} className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F2F4F6] rounded-full text-[13px] font-bold text-[#6B7684] self-start active:scale-95 transition-all">
+                                        <ChevronRight className="w-4 h-4 rotate-180" /> 처음부터 다시 선택
                                     </button>
-                                    <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                                    <div className="grid grid-cols-3 gap-3 content-start overflow-y-auto pr-1 pb-10 flex-1 custom-scrollbar">
                                         {(() => {
                                             const provinceKey = Object.keys(PROVINCE_DISPLAY_NAMES).find(key => PROVINCE_DISPLAY_NAMES[key] === tempCity);
                                             return provinceKey ? REGION_DATA[provinceKey].map(r => (
                                                 <button
                                                     key={`${provinceKey}-${r.id}`}
                                                     onClick={() => handleDistrictClick(r.name)}
-                                                    className={`py-5 rounded-[22px] text-[14px] font-bold transition-all ${selectedDistrict === r.name && selectedCity === tempCity ? 'bg-[#3182F6] text-white' : 'bg-[#F2F4F6] text-[#4E5968]'}`}
+                                                    className={`py-6 rounded-[22px] text-[15px] font-bold transition-all border ${selectedDistrict === r.name && selectedCity === tempCity ? 'bg-[#3182F6] text-white border-[#3182F6] shadow-lg shadow-blue-100' : 'bg-[#F9FAFB] text-[#4E5968] border-[#F2F4F6] active:bg-[#E8F3FF]'}`}
                                                 >
                                                     {r.name}
                                                 </button>

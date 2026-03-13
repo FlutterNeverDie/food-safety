@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 const API_KEY = 'd2ca129c719a43bca51a';
-const BASE_URL = 'http://openapi.foodsafetykorea.go.kr/api';
 
 export interface FoodSafetyRow {
   PRCSCITYPOINT_BSSHNM: string; // 업소명
@@ -112,20 +111,27 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
 
     set({ isSearching: true });
     try {
-      // API 데이터는 시/군/구만 필터링해서 가져오고 키워드 검색은 앱 내부에서 처리함
-      const fetchUrl = `${BASE_URL}/${API_KEY}/I2630/json/1/1000`;
+      // 롤백: 1000개로 다시 조정 및 https 유지
+      const fetchUrl = `https://openapi.foodsafetykorea.go.kr/api/${API_KEY}/I2630/json/1/1000`;
+      
+      // [Debug] 앱 내 API 호출 확인
+      alert(`API 호출 시작: ${selectedCity} ${selectedDistrict}`);
 
       const response = await fetch(fetchUrl);
-      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
 
+      const data = await response.json();
+      
       if (data.I2630?.row) {
         let rows: FoodSafetyRow[] = data.I2630.row;
 
-        // 브라우저 단에서 선택한 지역 기반으로 2차 필터링 (시/군, 구 각각 포함 여부 검사)
+        // 롤백: 이전 주소 필터링 로직
         if (selectedCity || selectedDistrict) {
           rows = rows.filter(row => {
             if (!row.ADDR) return false;
-            // API는 '서울특별시 광진구' 형태로 주소를 반환하므로 '서울 광진구'로 통째로 비교하면 안됨
             const matchCity = selectedCity ? row.ADDR.includes(selectedCity) : true;
             const matchDistrict = selectedDistrict ? row.ADDR.includes(selectedDistrict) : true;
             return matchCity && matchDistrict;
@@ -152,11 +158,15 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
             raw: history
           };
         });
+
+        alert(`조회 성공: ${results.length}건 검색됨`);
         set({ searchResults: results });
       } else {
+        alert('결과 데이터가 없습니다 (I2630.row 없음)');
         set({ searchResults: [] });
       }
-    } catch (error) {
+    } catch (error: any) {
+      alert(`조회 오류 발생: ${error.message}\n${error.stack || ''}`);
       console.error('API Fetch Error:', error);
       set({ searchResults: [] });
     } finally {
