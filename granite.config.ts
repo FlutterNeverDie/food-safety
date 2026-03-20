@@ -19,4 +19,5 @@ export default defineConfig({
         type: 'partner',
     },
     permissions: [],
+
 });
