@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@toss/tds-mobile';
+
 import { AlertCircle } from 'lucide-react';
 
 export const SearchHeader: React.FC = () => {
@@ -10,7 +10,7 @@ export const SearchHeader: React.FC = () => {
                 <div className="w-6 h-6 bg-[#F04452] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(240,68,82,0.2)]">
                     <AlertCircle className="w-3.5 h-3.5 text-white" />
                 </div>
-                <Text className="text-[14px] font-semibold text-[#4E5968] tracking-tight">공공데이터 기반 위생 적발 이력</Text>
+                <span className="text-[14px] font-semibold text-[#4E5968] tracking-tight">공공데이터 기반 위생 적발 이력</span>
             </div>
 
             <div className="space-y-4">

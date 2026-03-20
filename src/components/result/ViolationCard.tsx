@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@toss/tds-mobile';
+
 import { Calendar, AlertCircle, ShieldAlert, History } from 'lucide-react';
 import type { FoodSafetyRow } from '../../store/useSearchStore';
 
@@ -18,7 +18,7 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                 {/* 헤더: 확정 날짜 뱃지 */}
                 <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F9FAFB] rounded-xl border border-[#F2F4F6] w-fit">
                     <Calendar className="w-4 h-4 text-[#8B95A1]" />
-                    <Text className="!text-[14px] !font-bold !text-[#4E5968] tracking-tight">{formatDate(row.DSPS_DCSNDT)} 확정 처분록</Text>
+                    <span className="!text-[14px] !font-bold !text-[#4E5968] tracking-tight">{formatDate(row.DSPS_DCSNDT)} 확정 처분록</span>
                 </div>
 
                 {/* 타임라인 레이아웃 */}
@@ -33,8 +33,8 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                                 <History className="w-[16px] h-[16px] text-[#8B95A1]" />
                             </div>
                             <div className="flex flex-col gap-1 pt-1.5 w-full">
-                                <Text className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">적발 일자</Text>
-                                <Text className="!text-[17px] !font-bold !text-[#333D4B] bg-[#F9FAFB] px-3 py-2 rounded-xl mt-1 w-fit border border-[#F2F4F6]/50 shadow-sm">{formatDate(violationDate)}</Text>
+                                <span className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">적발 일자</span>
+                                <span className="!text-[17px] !font-bold !text-[#333D4B] bg-[#F9FAFB] px-3 py-2 rounded-xl mt-1 w-fit border border-[#F2F4F6]/50 shadow-sm">{formatDate(violationDate)}</span>
                             </div>
                         </div>
                     )}
@@ -45,11 +45,11 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                             <AlertCircle className="w-[16px] h-[16px] text-[#F04452]" strokeWidth={2.5} />
                         </div>
                         <div className="flex flex-col gap-1 w-full pt-1.5">
-                            <Text className="!text-[13px] !font-bold !text-[#F04452] uppercase tracking-wide">위반 항목</Text>
+                            <span className="!text-[13px] !font-bold !text-[#F04452] uppercase tracking-wide">위반 항목</span>
                             <div className="bg-[#FFF8F8] p-4 rounded-2xl border border-[#FFE0E0]/60 mt-1 shadow-sm">
-                                <Text className="!text-[16px] !font-semibold !text-[#191F28] !leading-[1.6] break-keep">
+                                <p className="!text-[16px] !font-semibold !text-[#191F28] !leading-[1.6] break-keep">
                                     {row.VILTCN.replace(/^\(\d{8}\)/, '').trim()}
-                                </Text>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -60,11 +60,11 @@ export const ViolationCard: React.FC<Props> = ({ row, formatDate }) => {
                             <ShieldAlert className="w-[16px] h-[16px] text-white" strokeWidth={2} />
                         </div>
                         <div className="flex flex-col gap-1.5 pt-1.5 w-full">
-                            <Text className="!text-[13px] !font-bold !text-[#F04452] uppercase tracking-wide">최종 처분 명칭</Text>
+                            <span className="!text-[13px] !font-bold !text-[#F04452] uppercase tracking-wide">최종 처분 명칭</span>
                             <div className="mt-0.5">
-                                <Text className="!text-[22px] !font-bold !text-[#F04452] !leading-[1.3] break-keep tracking-[-0.02em]">
+                                <p className="!text-[22px] !font-bold !text-[#F04452] !leading-[1.3] break-keep tracking-[-0.02em]">
                                     {row.DSPSCN}
-                                </Text>
+                                </p>
                             </div>
                         </div>
                     </div>

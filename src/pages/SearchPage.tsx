@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { useTossRewardAd } from '../hooks/useTossRewardAd';
+import { useTossInterstitialAd } from '../hooks/useTossInterstitialAd';
 import { useNavigate } from 'react-router-dom';
-import { Text } from '@toss/tds-mobile';
+
 import { useOverlay } from '@toss/use-overlay';
 import { useSearchStore, type Restaurant } from '../store/useSearchStore';
 import { X, ChevronRight } from 'lucide-react';
@@ -39,10 +39,10 @@ export const SearchPage: React.FC = () => {
     const navigate = useNavigate();
     const overlay = useOverlay();
     const inputRef = useRef<HTMLInputElement>(null);
-    const { showAd, isAdLoaded, isSupported, hasError } = useTossRewardAd(AD_CONFIG.REWARD_ID);
+    const { showAd, isAdLoaded, isSupported } = useTossInterstitialAd(AD_CONFIG.INTERSTITIAL_ID);
     
     // 버튼을 비활성화할 지 판단
-    const isLoadingAd = isSupported && !isAdLoaded && !hasError;
+    const isLoadingAd = isSupported && !isAdLoaded;
 
     // [변경] useEffect 자동 검색 로직 삭제 (handleDistrictClick에서 직접 제어하여 중복/무한 호출 방지)
     // 이전: useEffect(() => { ... }, [...]);
@@ -91,12 +91,12 @@ export const SearchPage: React.FC = () => {
                     >
                         <div className="flex items-center justify-between px-2 pt-2">
                             <div className="flex flex-col">
-                                <Text className="text-[24px] font-bold text-[#191F28] tracking-tight">
+                                <span className="text-[24px] font-bold text-[#191F28] tracking-tight">
                                     {step === 'city' ? '어느 지역인가요?' : tempCity}
-                                </Text>
-                                <Text className="text-[14px] font-medium text-[#8B95A1] mt-1">
+                                </span>
+                                <span className="text-[14px] font-medium text-[#8B95A1] mt-1">
                                     {step === 'city' ? '주소를 찾기 위해 시/도를 선택해주세요' : '상세 시/군/구를 선택해주세요'}
-                                </Text>
+                                </span>
                             </div>
                             <button onClick={handleClose} className="p-2.5 bg-[#F2F4F6] rounded-full text-[#8B95A1] active:scale-90 transition-all">
                                 <X className="w-6 h-6" />
@@ -172,19 +172,19 @@ export const SearchPage: React.FC = () => {
                         <div className="flex flex-col items-center text-center space-y-4">
                             <div className="w-16 h-16 bg-[#FFF0F0] rounded-full flex items-center justify-center text-3xl text-[#F04452]">🚨</div>
                             <div className="space-y-2">
-                                <Text className="!text-[22px] !font-bold !leading-tight !text-[#191F28]">
+                                <p className="!text-[22px] !font-bold !leading-tight !text-[#191F28]">
                                     <span className="!font-semibold !text-[26px] !text-[#F04452]">{restaurant.name}</span>의<br />위생 적발 이력이 있어요
-                                </Text>
-                                <Text className="text-[15px] leading-relaxed text-[#8B95A1] font-medium">
+                                </p>
+                                <p className="text-[15px] leading-relaxed text-[#8B95A1] font-medium">
                                     식품안전나라 데이터를 기반으로 확인된<br />행정처분 내역입니다.
-                                </Text>
+                                </p>
                             </div>
                         </div>
 
                         <div className="bg-[#F9FAFB] rounded-[24px] p-6 space-y-4 border border-[#F2F4F6]">
                             <div className="flex justify-between items-start">
-                                <Text className="text-[14px] font-bold text-[#4E5968]">최근 적발일</Text>
-                                <Text className="text-[14px] font-medium text-[#191F28]">
+                                <span className="text-[14px] font-bold text-[#4E5968]">최근 적발일</span>
+                                <span className="text-[14px] font-medium text-[#191F28]">
                                     {(() => {
                                         const date = restaurant.lastInspection;
                                         if (date && date.length === 8) {
@@ -192,17 +192,17 @@ export const SearchPage: React.FC = () => {
                                         }
                                         return date || '정보 없음';
                                     })()}
-                                </Text>
+                                </span>
                             </div>
                             <div className="space-y-2">
-                                <Text className="text-[14px] font-bold text-[#4E5968] block">주요 위반 내용</Text>
+                                <span className="text-[14px] font-bold text-[#4E5968] block">주요 위반 내용</span>
                                 <div className="space-y-1.5">
                                     {restaurant.violations?.slice(0, 2).map((v, i) => (
                                         <div key={i} className="flex gap-2">
                                             <span className="text-[#F04452] shrink-0">•</span>
-                                            <Text className="text-[13px] font-medium text-[#4E5968] leading-relaxed line-clamp-2">
+                                            <p className="text-[13px] font-medium text-[#4E5968] leading-relaxed line-clamp-2">
                                                 {v.split(': ')[0]}
-                                            </Text>
+                                            </p>
                                         </div>
                                     ))}
                                 </div>

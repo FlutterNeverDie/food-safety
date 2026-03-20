@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@toss/tds-mobile';
+
 import { Store, MapPin } from 'lucide-react';
 import type { Restaurant } from '../../store/useSearchStore';
 
@@ -23,8 +23,8 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
                         <Store className="w-[16px] h-[16px] text-[#8B95A1]" />
                     </div>
                     <div className="flex flex-col gap-1 pt-1.5 w-full">
-                        <Text className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">업종 분류</Text>
-                        <Text className="!text-[17px] !font-bold !text-[#333D4B] bg-[#F9FAFB] px-3 py-2 rounded-xl mt-1 w-fit border border-[#F2F4F6]/50 shadow-sm">{restaurant.category}</Text>
+                        <span className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">업종 분류</span>
+                        <span className="!text-[17px] !font-bold !text-[#333D4B] bg-[#F9FAFB] px-3 py-2 rounded-xl mt-1 w-fit border border-[#F2F4F6]/50 shadow-sm">{restaurant.category}</span>
                     </div>
                 </div>
 
@@ -34,11 +34,11 @@ export const RestaurantDetailInfo: React.FC<Props> = ({ restaurant }) => {
                         <MapPin className="w-[16px] h-[16px] text-[#8B95A1]" />
                     </div>
                     <div className="flex flex-col gap-1 pt-1.5 flex-1 p-0.5 w-full">
-                        <Text className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">소재지 주소</Text>
+                        <span className="!text-[13px] !font-bold !text-[#8B95A1] uppercase tracking-wide">소재지 주소</span>
                         <div className="bg-[#F9FAFB] p-4 rounded-2xl border border-[#F2F4F6] mt-1 shadow-sm">
-                            <Text className="!text-[16px] !font-semibold !text-[#191F28] !leading-[1.6] break-keep">
+                            <p className="!text-[16px] !font-semibold !text-[#191F28] !leading-[1.6] break-keep">
                                 {restaurant.address}
-                            </Text>
+                            </p>
                         </div>
                     </div>
                 </div>

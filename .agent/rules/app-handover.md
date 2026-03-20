@@ -29,11 +29,10 @@ trigger: always_on
 | **빌드 도구** | **Vite** | v7.3.1 | 매우 빠른 HMR을 지원하는 빌드 도구. |
 | **언어** | **TypeScript** | v5.7.2 | 안정성을 위한 정적 타입 지원 자바스크립트. |
 | **상태 관리** | **Zustand** | v5.0.11 | 가볍고 직관적인 전역 상태 관리 (`useSearchStore` 활용). |
-| **스타일링** | **Vanilla CSS** | - | **Toss Design System (TDS)** 스타일을 차용한 커스텀 CSS. 
+| **디자인(컴포넌트)** | **Vanilla CSS** | - | `@toss/tds-mobile` 패키지를 완전히 배제하고, CSS 표준 기술을 활용해 **Toss Design System(TDS)** 스타일 가이드를 직접 구현해 전역에 사용 (Toss Pro Max V2 UI/UX 적용). 특정 NPM 패키지가 아니므로 버전을 명시하지 않음. |
 | **UI 라이브러리** | **Framer Motion** | v12.34.1 | 부드러운 애니메이션 및 화면 전환. |
-| **팝업/모달** | **@toss/use-overlay**| v1.4.2 | 선언적이고 깔끔한 바텀 시트 및 다이얼로그 관리. |
+| **팝업/모달** | **@toss/use-overlay**| v1.4.2 (^1.4.2) | 토스의 라이브러리 중 팝업 및 바텀 시트를 띄우는 용도로만 가져와서 활용함. 1.4.2 버전으로 설치되어 있음. |
 | **아이콘** | **Lucide React** | v0.574.0 | 일관되고 깔끔한 아이콘 세트. |
-| **디자인 참조** | **@toss/tds-mobile** | v2.2.1 | 모바일 최적화 UI 패턴 참조용. |
 | **수익화(광고)** | **@apps-in-toss/web-framework**| v1.9.0 | 통합 인앱 광고 2.0 ver2 (보상형/전면형 광고 API 연동). |
 
 ---

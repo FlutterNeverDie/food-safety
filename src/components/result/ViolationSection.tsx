@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@toss/tds-mobile';
+
 import { ShieldCheck } from 'lucide-react';
 import { ViolationCard } from './ViolationCard';
 import { formatDate } from '../../utils/format';
@@ -28,7 +28,7 @@ export const ViolationSection: React.FC<Props> = ({ records }) => {
                         <div className="w-12 h-12 bg-[#F9FAFB] rounded-full flex items-center justify-center">
                             <ShieldCheck className="w-6 h-6 text-[#B0B8C1]" />
                         </div>
-                        <Text className="text-[#B0B8C1] font-bold text-[16px]">깨끗한 매장입니다</Text>
+                        <span className="text-[#B0B8C1] font-bold text-[16px]">깨끗한 매장입니다</span>
                     </div>
                 )}
             </div>

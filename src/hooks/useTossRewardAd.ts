@@ -6,9 +6,15 @@ export const useTossRewardAd = (adGroupId: string) => {
     const [hasError, setHasError] = useState(false);
     const isAdLoadedRef = useRef(false);
     
-    // 지원 여부 체크
-    const isSupported = typeof GoogleAdMob?.loadAppsInTossAdMob?.isSupported === 'function' && 
-                        GoogleAdMob.loadAppsInTossAdMob.isSupported();
+    // 지원 여부 체크 (로컬 브라우저 에러 방지용 try-catch)
+    let isSupported = false;
+    try {
+        isSupported = typeof GoogleAdMob?.loadAppsInTossAdMob?.isSupported === 'function' && 
+                      GoogleAdMob.loadAppsInTossAdMob.isSupported();
+    } catch (error) {
+        // 브라우저 등 미지원 환경에서 발생하는 예외 무시
+        isSupported = false;
+    }
 
     const preloadAd = useCallback(() => {
         if (!isSupported) return () => {};
