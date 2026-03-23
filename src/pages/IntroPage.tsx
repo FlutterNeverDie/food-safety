@@ -2,11 +2,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Bell } from 'lucide-react';
+import { useSearchStore } from '../store/useSearchStore';
 
 export const IntroPage: React.FC = () => {
     const navigate = useNavigate();
+    const { clearRecentSearches, setKeyword, setSelectedCity, setSelectedDistrict } = useSearchStore();
 
     const handleStart = () => {
+        // 검색 기록 초기화 (로컬 스토리지)
+        clearRecentSearches();
+        // 현재 텍스트 필드의 키워드 및 선택 지역 초기화
+        setKeyword('');
+        setSelectedCity('');
+        setSelectedDistrict('');
         navigate('/search');
     };
 

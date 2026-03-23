@@ -47,6 +47,8 @@ body {
   color: var(--toss-gray-900);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
 }
 
 input,

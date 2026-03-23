@@ -13,7 +13,7 @@ export const AD_CONFIG = {
 
     // 전면 광고 (매장 상세 보기 전 노출)
     INTERSTITIAL_ID: 'ait.v2.live.df59f9d1ea3544eb',
-    
+
     // 2. 배너 광고 - 문구 강조형 (검색 화면 최하단 고정 띠 배너)
     // BANNER_LIST_ID: 'ait-ad-test-banner-id', // 실제 ID로 교체하세요
     BANNER_LIST_ID: 'ait.v2.live.6d71e9b248db4d48',
