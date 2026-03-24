@@ -215,7 +215,7 @@ export const SearchPage: React.FC = () => {
                                 onClick={isLoadingAd ? undefined : handleShowAd}
                                 disabled={isLoadingAd}
                             >
-                                {isLoadingAd ? '상세 내역 전체보기 (광고 로딩 중...)' : '광고 보고 상세 내역 전체보기'}
+                                {isLoadingAd ? '상세 내역 전체보기' : '상세 내역 전체보기'}
                             </button>
                             <button className="w-full py-2 text-[#8B95A1] font-bold text-[15px]" onClick={handleClose}>
                                 닫기
